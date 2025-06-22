@@ -6,8 +6,10 @@ from .models import Course, Student, Teacher, Lesson, Category, LessonFiles, Stu
 class LessonInline(admin.TabularInline):
     model = LessonFiles
 
+
 class StudentInline(admin.StackedInline):
     model = StudentsGroup
+
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
@@ -28,10 +30,12 @@ class LessonAdmin(admin.ModelAdmin):
         LessonInline,
     ]
 
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = "title",
     list_display_links = "title",
+
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):

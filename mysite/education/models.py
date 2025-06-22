@@ -2,10 +2,9 @@ from django.db import models
 # from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 
+
 # Create your models here.
 # UserModel = get_user_model()
-
-
 
 
 class Student(models.Model):
@@ -36,7 +35,6 @@ class Course(models.Model):
         return self.title
 
 
-
 class Lesson(models.Model):
     title = models.CharField(max_length=200, unique=True, verbose_name='Название урока')
     description = models.TextField(null=False, blank=True, verbose_name='Описание урока')
@@ -62,9 +60,3 @@ class LessonFiles(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='files')
     file = models.FileField(upload_to=lesson_files_path)
     description = models.CharField(max_length=200, null=False, blank=True)
-
-
-
-
-
-
