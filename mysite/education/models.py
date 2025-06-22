@@ -10,9 +10,16 @@ from django.contrib.auth.models import User
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.user.username
+
 
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+
+    def __str__(self):
+        return self.user.username
 
 
 class Category(models.Model):
@@ -28,6 +35,7 @@ class Course(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='courses')
     created = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now=True)
+    students = models.ManyToManyField(Student, related_name='courses')
 
     is_active = models.BooleanField(default=True)
 
@@ -56,8 +64,8 @@ class Lesson(models.Model):
         ordering = ['pk']
 
 
-class StudentsGroup(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.DO_NOTHING, related_name='students')
+# class StudentsGroup(models.Model):
+#     course = models.ForeignKey(Course, on_delete=models.DO_NOTHING, related_name='students')
 
 
 def lesson_files_path(instance: "LessonFiles", filename: str) -> str:

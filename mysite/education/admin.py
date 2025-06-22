@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Course, Student, Teacher, Lesson, Category, LessonFiles, StudentsGroup
+from .models import Course, Student, Teacher, Lesson, Category, LessonFiles
 
 
 # Register your models here.
@@ -7,8 +7,8 @@ class LessonInline(admin.TabularInline):
     model = LessonFiles
 
 
-class StudentInline(admin.StackedInline):
-    model = StudentsGroup
+# class StudentInline(admin.StackedInline):
+#     model = StudentsGroup
 
 
 @admin.register(Course)
@@ -19,16 +19,17 @@ class CourseAdmin(admin.ModelAdmin):
     search_fields = "title", "description",
 
     inlines = [
-        StudentInline
+        # StudentInline
     ]
 
 
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
-    list_display = "pk", "title", "teacher", "photo",
+    list_display = "pk", "title", "description", "teacher", "photo",
     inlines = [
         LessonInline,
     ]
+    list_display_links = "pk", "title",
 
 
 @admin.register(Category)
