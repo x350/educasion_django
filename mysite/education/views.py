@@ -1,10 +1,52 @@
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect
 from .forms import UserRegisterForm, UserLoginForm
 from django.contrib import messages
 from django.contrib.auth import login, logout
-
+from django.views.generic import ListView, DetailView, DeleteView, CreateView
+from .models import Course, Lesson
 
 # Create your views here.
+
+class CoursesListView(ListView):
+    model = Course
+    template_name = "education/course_list.html"
+    context_object_name = 'courses'
+    # extra_context = {'title': 'Наши курсы'}
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Наши курсы'
+        return context
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return Course.objects.filter(is_active=True)
+        else:
+            return Course.objects.filter(is_active=True)
+
+    # def dispatch(self, request, *args, **kwargs):
+    #     if not request.user.is_authenticated:
+    #         return HttpResponseForbidden()
+    #     return super(CoursesView, self).dispatch(request, *args, **kwargs)
+
+
+class CourseDetailView(DetailView):
+    model = Course
+    template_name = "education/course_detail.html"
+    context_object_name = 'course'
+
+
+class LessonDetailView(DetailView):
+    # model = Lesson
+    queryset = (
+        Lesson.objects.
+        select_related("course").
+        prefetch_related("files")
+    )
+    template_name = "education/lesson_detail.html"
+    context_object_name = 'lesson'
+
 
 def register(request):
     if request.method == 'POST':

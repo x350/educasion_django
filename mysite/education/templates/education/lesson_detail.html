@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block sidebar %}
+{% endblock %}
+
+{% block body %}
+
+    <h1>Hello lesson!</h1>
+{% if lesson %}
+<p>{{ lesson.title }}</p>
+<p>{{ lesson.course.pk }}</p>
+
+<a href="{% url 'education:courses_detail' pk=lesson.course.pk %}">На главную страницу курса</a>
+<a href="">На главную страницу</a>
+
+
+{% endif %}
+{% endblock %}

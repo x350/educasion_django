@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}
+
+{% block body %}
+
+    <h1>Hello courses!</h1>
+{% if courses %}
+
+{% for item in courses %}
+
+<ul>
+    <span>
+    <li>
+      <p>{{ item.category }}</p>
+    </li>
+    <li>
+      <p>{{ item.title }}</p>
+    </li>
+    <li>
+      <p>{{ item.description }}</p>
+    </li>
+    <li>
+      <p>{{ item.created }}</p>
+    </li>
+    </span>
+    <br>
+</ul>
+  {% endfor %}
+
+{% endif %}
+{% endblock %}

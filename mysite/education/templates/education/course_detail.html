@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}
+
+{% block body %}
+
+    <h1>Hello course!</h1>
+{% if course %}
+
+<ul>
+    <li>
+      <p>{{ course.category }}</p>
+    </li>
+    <li>
+      <p>{{ course.title }}</p>
+    </li>
+    <li>
+      <p>{{ course.description }}</p>
+    </li>
+    <li>
+      <p>Курс создан {{ course.created }}</p>
+    </li>
+    <li>
+      <p>Курс обновлен {{ course.update }}</p>
+    </li>
+
+    <li>
+        <ul>
+            <p>Ученики курса:</p>
+
+            {% for item in course.students.all %}
+                {% if item.user.last_name %}
+                <li><a href="">{{ item.user.first_name }} {{ item.user.last_name }}</a></li>
+                {% else %}
+                <li><a href="">{{ item.user.username }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </li>
+
+
+</ul>
+{% else %}
+    <p>Нет ни одного курса</p>
+{% endif %}
+
+<li>
+    <ul>
+    {% for item in course.lesson_set.all %}
+        <li><a href="{% url 'education:lesson_detail' pk=item.pk %}">{{ item.title }}</a> </li>
+    {% endfor %}
+    </ul>
+</li>
+{% endblock %}

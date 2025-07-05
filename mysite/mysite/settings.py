@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'education.apps.EducationConfig'
+    'education.apps.EducationConfig',
+    'nested_admin',
 ]
 
 MIDDLEWARE = [

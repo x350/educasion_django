@@ -1,36 +1,30 @@
 from django.contrib import admin
+from django.db.models import QuerySet
+from django.http import HttpRequest
+from nested_admin import NestedModelAdmin, NestedTabularInline, NestedStackedInline
 from .models import Course, Student, Teacher, Lesson, Category, LessonFiles
 
 
 # Register your models here.
-class LessonInline(admin.TabularInline):
-    model = LessonFiles
 
 
-# class StudentInline(admin.StackedInline):
-#     model = StudentsGroup
+# class LessonsCourseInline(admin.StackedInline):
+#     model = Lesson
+#     fields = "title", 'description', 'teacher', 'photo',
+#     # inlines = [LessonInline]
 
 
-@admin.register(Course)
-class CourseAdmin(admin.ModelAdmin):
-    list_display = "pk", "title", "description", "category", "created", "update", "is_active"
-    list_display_links = "pk", "title", "category", "is_active"
-    ordering = "pk", "-title"
-    search_fields = "title", "description",
+class StudentInline(NestedStackedInline):
+    model = Course.students.through
+    extra = 1
 
-    inlines = [
-        # StudentInline
-    ]
+@admin.action(description='Deactivtion')
+def mark_deactivate(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
+    queryset.update(is_active=False)
 
-
-@admin.register(Lesson)
-class LessonAdmin(admin.ModelAdmin):
-    list_display = "pk", "title", "description", "teacher", "photo",
-    inlines = [
-        LessonInline,
-    ]
-    list_display_links = "pk", "title",
-
+@admin.action(description='Activtion')
+def mark_activate(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
+    queryset.update(is_active=True)
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -40,9 +34,55 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    pass
+    list_display = "user__username", 'user__first_name', 'user__last_name'
+    list_display_links = "user__username", 'user__first_name', 'user__last_name'
 
 
 @admin.register(Teacher)
 class TeacherAdmin(admin.ModelAdmin):
-    pass
+    list_display = "user__username", 'user__first_name', 'user__last_name'
+    list_display_links = "user__username", 'user__first_name', 'user__last_name'
+
+
+class LessonFilesInline(NestedStackedInline):
+    model = LessonFiles
+    extra = 1
+    # model = Lesson.files
+    fields = 'file', 'description'
+
+
+# @admin.register(Lesson)
+# class LessonAdmin(admin.ModelAdmin):
+#     model = Lesson
+#     list_display = "pk", "title", "description", "teacher", "photo", 'course'
+#     inlines = [
+#         LessonFilesInline,
+#     ]
+#     list_display_links = "pk", "title",
+
+class LessonInLine(NestedStackedInline):
+    model = Lesson
+    extra = 1
+    list_display = "pk", "title", "description", "teacher", "photo", 'course'
+    inlines = [
+        LessonFilesInline,
+    ]
+    list_display_links = "pk", "title",
+
+
+
+@admin.register(Course)
+class CourseAdmin(NestedModelAdmin):
+    actions = [
+        mark_deactivate,
+        mark_activate
+    ]
+    list_display = "pk", "title", "description", "category",  "created", "update", "is_active"
+    list_display_links = "pk", "title", "category", "is_active"
+    ordering = "pk", "-title"
+    search_fields = "title", "description",
+
+    inlines = [
+        StudentInline,
+        LessonInLine,
+    ]

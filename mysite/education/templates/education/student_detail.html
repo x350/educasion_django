@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}
+
+{% block body %}
+
+    <h1>Hello student!</h1>
+{% if content %}
+
+<ul>
+{% for item in content %}
+    <li>
+      <p>{{ item }}</p>
+    </li>
+
+  {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

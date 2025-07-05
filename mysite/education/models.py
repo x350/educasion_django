@@ -1,3 +1,4 @@
+from django.contrib.auth import admin
 from django.db import models
 # from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
@@ -10,12 +11,22 @@ from django.contrib.auth.models import User
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name = 'Студент'
+        verbose_name_plural = 'Студенты'
+        ordering = ['user']
+
     def __str__(self):
         return self.user.username
 
 
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Преподаватель'
+        verbose_name_plural = 'Преподаватели'
+        ordering = ['user']
 
 
     def __str__(self):
@@ -24,6 +35,11 @@ class Teacher(models.Model):
 
 class Category(models.Model):
     title = models.CharField(max_length=200, unique=True, verbose_name='Название дисциплины')
+
+    class Meta:
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
+        ordering = ['title']
 
     def __str__(self):
         return self.title
@@ -52,8 +68,9 @@ class Course(models.Model):
 class Lesson(models.Model):
     title = models.CharField(max_length=200, unique=True, verbose_name='Название урока')
     description = models.TextField(null=False, blank=True, verbose_name='Описание урока')
-    teacher = models.OneToOneField(Teacher, on_delete=models.DO_NOTHING)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     photo = models.ImageField(null=True, upload_to='photos/%Y/%m/%d/', blank=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_query_name='lessons', verbose_name='Курс')
 
     def __str__(self):
         return self.title
@@ -79,3 +96,14 @@ class LessonFiles(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='files')
     file = models.FileField(upload_to=lesson_files_path)
     description = models.CharField(max_length=200, null=False, blank=True)
+
+    def __str__(self):
+        return f'Файлы урока {self.lesson.title}'
+
+    class Meta:
+        verbose_name = 'Файл'
+        verbose_name_plural = 'Файлы'
+        ordering = ['pk']
+
+
+
