@@ -34,9 +34,9 @@
 
             {% for item in course.students.all %}
                 {% if item.user.last_name %}
-                <li><a href="">{{ item.user.first_name }} {{ item.user.last_name }}</a></li>
+                <li><a href="{% url 'education:student_detail' pk=item.pk%}">{{ item.user.first_name }} {{ item.user.last_name }}</a></li>
                 {% else %}
-                <li><a href="">{{ item.user.username }}</a></li>
+                <li><a href="{% url 'education:student_detail' pk=item.pk%}">{{ item.user.username }}</a></li>
                 {% endif %}
             {% endfor %}
         </ul>

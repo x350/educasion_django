@@ -9,15 +9,17 @@
 {% block body %}
 
     <h1>Hello student!</h1>
-{% if content %}
+
+    <h2> Курсы студента {{ student.user.username }}: {{ student.user.first_name }} {{ student.user.last_name }}</h2>
 
 <ul>
-{% for item in content %}
+    {% for item in student.courses.all %}
     <li>
-      <p>{{ item }}</p>
+      <a href="{% url 'education:course_detail' pk=item.pk %}">{{ item }}</a>
     </li>
+    {% endfor %}
 
-  {% endfor %}
+
 </ul>
-{% endif %}
+
 {% endblock %}

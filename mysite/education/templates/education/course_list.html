@@ -15,12 +15,13 @@
 
 <ul>
     <span>
-    <li>
+       <li>
+      <a href="{% url 'education:course_detail' pk=item.pk %}">{{ item.title }}</a>
+    </li>
+        <li>
       <p>{{ item.category }}</p>
     </li>
-    <li>
-      <p>{{ item.title }}</p>
-    </li>
+
     <li>
       <p>{{ item.description }}</p>
     </li>

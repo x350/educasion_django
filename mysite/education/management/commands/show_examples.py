@@ -6,13 +6,15 @@ from education.models import Lesson, Course, Teacher, Student, LessonFiles
 class Command(BaseCommand):
 
     def simple_filtres(self):
-        course = Course.objects.get(pk=1)
-        users = course.lesson_set.all()
-        op_qs = Lesson.objects.all()
+        item = Student.objects.get(pk=1)
+
+
         # op_qs = Lesson.LessonFiles_set()
         # for op in op_qs:
         # self.stdout.write(f'{op_qs[0].files.get_queryset()[0].file}')
-        self.stdout.write(f'{users[0]}')
+        # qs = item.field.name
+        qs = item.courses.all()
+        self.stdout.write(f'{qs}')
 
 
     def handle(self, *args, **kwargs):

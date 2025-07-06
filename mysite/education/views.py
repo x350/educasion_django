@@ -4,9 +4,28 @@ from .forms import UserRegisterForm, UserLoginForm
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.views.generic import ListView, DetailView, DeleteView, CreateView
-from .models import Course, Lesson
+from .models import Course, Lesson, Student, Teacher
 
 # Create your views here.
+
+
+class StudentsListView(ListView):
+    model = Student
+    context_object_name = 'students'
+    template_name = "education/student_list"
+    # queryset = (
+    #     Student.objects
+    #     .select_related("user")
+    # )
+
+class StudentDetailView(DetailView):
+    queryset = (
+        Student.objects
+        .select_related("user")
+        . prefetch_related("courses")
+    )
+    context_object_name = 'student'
+    template_name = "education/student_detail.html"
 
 class CoursesListView(ListView):
     model = Course
@@ -40,9 +59,10 @@ class CourseDetailView(DetailView):
 class LessonDetailView(DetailView):
     # model = Lesson
     queryset = (
-        Lesson.objects.
-        select_related("course").
-        prefetch_related("files")
+        Lesson.objects
+        .select_related("course")
+        .select_related("teacher")
+        .prefetch_related("files")
     )
     template_name = "education/lesson_detail.html"
     context_object_name = 'lesson'

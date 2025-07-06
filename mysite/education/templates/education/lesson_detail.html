@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+<!--{% load static %}-->
 
 {% block title %}{{ title }}{% endblock %}
 
@@ -9,11 +10,26 @@
 
     <h1>Hello lesson!</h1>
 {% if lesson %}
-<p>{{ lesson.title }}</p>
-<p>{{ lesson.course.pk }}</p>
+<p>Название урока: {{ lesson.title }}</p>
+<p>Описание: {{ lesson.description }}</p>
+<p>Перподаватель: {{ lesson.teacher.user.first_name}} {{ lesson.teacher.user.last_name}}</p>
+<ul>
+    <p>Файлы урока: </p>
+    <ul>
+    {% for item in lesson.files.all %}
+        <li>
+            <a href="{{ item.file.url }}">{{ item.description }}</a>
+        </li>
+    {% empty %}
+        <li><p>Нет файлов</p></li>
+    {% endfor %}
+    </ul>
 
-<a href="{% url 'education:courses_detail' pk=lesson.course.pk %}">На главную страницу курса</a>
-<a href="">На главную страницу</a>
+
+</ul>
+
+<a href="{% url 'education:course_detail' pk=lesson.course.pk %}">На главную страницу курса</a><br>
+<a href="{% url 'education:courses_list' %}">На главную страницу</a>
 
 
 {% endif %}
