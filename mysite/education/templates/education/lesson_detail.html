@@ -18,7 +18,7 @@
     <ul>
     {% for item in lesson.files.all %}
         <li>
-            <a href="{{ item.file.url }}">{{ item.description }}</a>
+            <a href="{{ item.file.url }}">{% firstof item.description item.file %}</a>
         </li>
     {% empty %}
         <li><p>Нет файлов</p></li>

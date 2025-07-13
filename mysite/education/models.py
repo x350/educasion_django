@@ -2,6 +2,7 @@ from django.contrib.auth import admin
 from django.db import models
 # from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from django.urls import reverse_lazy
 
 
 # Create your models here.
@@ -11,23 +12,31 @@ from django.contrib.auth.models import User
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    def get_absolute_url(self):
+        return reverse_lazy('education:student_detail', kwargs={'pk': self.pk})
+
     class Meta:
         verbose_name = 'Студент'
         verbose_name_plural = 'Студенты'
         ordering = ['user']
 
     def __str__(self):
-        return self.user.username
+        if not self.user.last_name:
+            return self.user.username
+        else:
+            return ' '.join([self.user.first_name, self.user.last_name])
 
 
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    def get_absolute_url(self):
+        return reverse_lazy('education:teacher_detail', kwargs={'pk': self.pk})
+
     class Meta:
         verbose_name = 'Преподаватель'
         verbose_name_plural = 'Преподаватели'
         ordering = ['user']
-
 
     def __str__(self):
         return self.user.username
@@ -51,9 +60,12 @@ class Course(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='courses')
     created = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now=True)
-    students = models.ManyToManyField(Student, related_name='courses')
+    students = models.ManyToManyField(Student, related_name='courses', blank=True, null=True)
 
     is_active = models.BooleanField(default=True)
+
+    def get_absolute_url(self):
+        return reverse_lazy('education:course_detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.title
@@ -64,13 +76,15 @@ class Course(models.Model):
         ordering = ['-created']
 
 
-
 class Lesson(models.Model):
     title = models.CharField(max_length=200, unique=True, verbose_name='Название урока')
     description = models.TextField(null=False, blank=True, verbose_name='Описание урока')
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='lessons')
     photo = models.ImageField(null=True, upload_to='photos/%Y/%m/%d/', blank=True)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_query_name='lessons', verbose_name='Курс')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='lessons', blank=True, null=True, verbose_name='Курс')
+
+    def get_absolute_url(self):
+        return reverse_lazy('education:lesson_detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.title
@@ -104,6 +118,3 @@ class LessonFiles(models.Model):
         verbose_name = 'Файл'
         verbose_name_plural = 'Файлы'
         ordering = ['pk']
-
-
-

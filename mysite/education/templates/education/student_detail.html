@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}Информация о студенте {{ student.user.username }}.{% endblock %}
 
 {% block sidebar %}
 
@@ -15,11 +15,9 @@
 <ul>
     {% for item in student.courses.all %}
     <li>
-      <a href="{% url 'education:course_detail' pk=item.pk %}">{{ item }}</a>
+      <a href="{{ item.get_absolute_url }}">{{ item }}</a>
     </li>
     {% endfor %}
-
-
 </ul>
 
 {% endblock %}

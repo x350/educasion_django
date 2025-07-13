@@ -14,7 +14,7 @@
 
 <ul>
     <li>
-        <a href="{% url 'education:student_detail' pk=item.pk %}">{{ item.user.username }}:</a> <p>{{ item.user.first_name }} {{ item.user.last_name}}</p>
+        <a href="{{ item.get_absolute_url }}">{{ item.user.username }}:</a> <p>{{ item.user.first_name }} {{ item.user.last_name}}</p>
     </li>
 
     <br>

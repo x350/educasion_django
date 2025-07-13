@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}Наши преподаватели.{% endblock %}
 
 {% block sidebar %}
 
@@ -9,18 +9,18 @@
 {% block body %}
 
     <h1>Hello teachers!</h1>
-{% if content %}
 
-{% for item in content %}
+{% for item in teachers %}
 
 <ul>
     <li>
-      <p>{{ item.user.username }}</p>
+        <a href="{{ item.get_absolute_url }}">{{ item.user.username }}:</a> <p>{{ item.user.first_name }} {{ item.user.last_name}}</p>
     </li>
-    
+
     <br>
 </ul>
+    {% empty %}
+<p> Нет преподавателей</p>
   {% endfor %}
 
-{% endif %}
 {% endblock %}

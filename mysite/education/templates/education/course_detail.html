@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %} Страница курса "{{ course.title }}".{% endblock %}
 
 {% block sidebar %}
 
@@ -29,14 +29,13 @@
     </li>
 
     <li>
+        <h3>Ученики курса:</h3>
         <ul>
-            <p>Ученики курса:</p>
-
             {% for item in course.students.all %}
                 {% if item.user.last_name %}
-                <li><a href="{% url 'education:student_detail' pk=item.pk%}">{{ item.user.first_name }} {{ item.user.last_name }}</a></li>
+                <li><a href="{{ item.get_absolute_url }}">{{ item.user.first_name }} {{ item.user.last_name }}</a></li>
                 {% else %}
-                <li><a href="{% url 'education:student_detail' pk=item.pk%}">{{ item.user.username }}</a></li>
+                <li><a href="{{ item.get_absolute_url }}">{{ item.user.username }}</a></li>
                 {% endif %}
             {% endfor %}
         </ul>
@@ -48,11 +47,18 @@
     <p>Нет ни одного курса</p>
 {% endif %}
 
-<li>
+ <h4>Уроки курса:</h4>
     <ul>
-    {% for item in course.lesson_set.all %}
-        <li><a href="{% url 'education:lesson_detail' pk=item.pk %}">{{ item.title }}</a> </li>
+    {% for item in course.lessons.all %}
+        <li><a href="{{ item.get_absolute_url }}">{{ item.title }}</a> </li>
     {% endfor %}
     </ul>
-</li>
+
+<div>
+    <a href="{% url 'education:course_update' pk=course.pk %}">Редактировать курс</a>
+</div>
+<div>
+    <a href="{% url 'education:courses_list' %}">Вернуться к списку курсов</a>
+</div>
+
 {% endblock %}

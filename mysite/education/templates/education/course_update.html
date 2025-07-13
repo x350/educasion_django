@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Редактирование курса{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}
+
+{% block body %}
+<h1>Редактирование курса</h1>
+<div>
+  <form method="post">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+        <h3>Редактирование урока</h3>
+    {{ lesson_formset.management_form }}
+    {% for form in lesson_formset %}
+        {{ form.as_p }}
+    {% endfor %}
+
+
+    <button type="submit">Редактирование курса</button>
+  </form>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{{ form.media.js }}
+<a href="{% url 'education:courses_list' %}">Вернуться к списку курсов</a>
+{% endblock %}

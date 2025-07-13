@@ -1,6 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from django_select2.forms import Select2MultipleWidget, Select2Widget
+from .models import Course, Lesson, Student, Teacher, LessonFiles
+from django.forms import inlineformset_factory
 
 
 class UserLoginForm(AuthenticationForm):
@@ -20,3 +23,55 @@ class UserRegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2', 'first_name', 'last_name')
+
+
+# class StudentWidget(s2forms.ModelSelect2Widget):
+#     search_fields = [
+#         "user__icontains",
+#         # "first_name__icontains",
+#         # "last_name__icontains",
+#         # "email__icontains",
+#     ]
+
+#
+# class LessonWidget(s2forms.ModelSelect2MultipleWidget):
+#     search_fields = [
+#         "title__icontains",
+#         "description__icontains",
+#         "teacher__icontains",
+#     ]
+#
+class CourseForm(forms.ModelForm):
+    students = forms.ModelMultipleChoiceField(
+        queryset=Student.objects.all(),
+        widget=Select2MultipleWidget,
+        label='Студенты',
+        required=False,
+
+    )
+    lesson = forms.ModelMultipleChoiceField(
+        queryset=Lesson.objects.all(),
+        widget=Select2MultipleWidget,
+        label='Уроки',
+        required=False,
+    )
+    class Meta:
+        model = Course
+        fields = "__all__"
+
+LessonFormSet = inlineformset_factory(
+    Course,
+    Lesson,
+    fields=('title', 'description', 'teacher', 'photo', ),
+    extra=1,
+    can_delete=False,
+)
+
+LessonFilesFormSet = inlineformset_factory(
+    Lesson,
+    LessonFiles,
+    fields=('lesson', 'file', 'description'),
+    extra=1,
+    can_delete=False,
+
+)

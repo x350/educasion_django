@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}Наши курсы.{% endblock %}
 
 {% block sidebar %}
 
@@ -9,14 +9,15 @@
 {% block body %}
 
     <h1>Hello courses!</h1>
-{% if courses %}
+
+<a href="{% url 'education:course_create' %}">Создать новый курс</a>
 
 {% for item in courses %}
 
 <ul>
     <span>
        <li>
-      <a href="{% url 'education:course_detail' pk=item.pk %}">{{ item.title }}</a>
+      <a href="{{ item.get_absolute_url }}">{{ item.title }}</a>
     </li>
         <li>
       <p>{{ item.category }}</p>
@@ -31,7 +32,9 @@
     </span>
     <br>
 </ul>
+  {% empty %}
+    <p> Курсов нет</p>
   {% endfor %}
 
-{% endif %}
+
 {% endblock %}
