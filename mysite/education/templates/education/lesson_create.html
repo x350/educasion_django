@@ -1,0 +1,33 @@
+<!--{% load static %}-->
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block sidebar %}
+{% endblock %}
+
+{% block body %}
+
+    <h1>Создание урока!</h1>
+div>
+  <form method="post">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+        <h3>Добавление файлов.</h3>
+    {{ lesson_formset.management_form }}
+    {% for form in lesson_formset %}
+        {{ form.as_p }}
+    {% endfor %}
+
+
+    <button type="submit">Создание курса</button>
+  </form>
+</div>
+
+<a href="{% url 'education:course_detail' pk=lesson.course.pk %}">На главную страницу курса</a><br>
+<a href="{% url 'education:courses_list' %}">На главную страницу</a>
+
+
+
+{% endblock %}

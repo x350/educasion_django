@@ -1,0 +1,17 @@
+<h1>Создание урока</h1>
+<div>
+  <form method="post">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+        <h3>Создание урока</h3>
+    {{ lesson_formset.management_form }}
+    {% for form in lesson_formset %}
+        {{ form.as_p }}
+    {% endfor %}
+
+
+    <button type="submit">Создание курса</button>
+  </form>
+</div>

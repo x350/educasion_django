@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+<!--{% load static %}-->
+
+{% block title %} Confirm delete {{ object.title }}{% endblock %}
+
+{% block sidebar %}
+{% endblock %}
+
+{% block body %}
+
+    <h1>Вы уверены, что хотите удалить курс {{ object.name }}?</h1>
+    <br>
+
+<a href="{% url 'education:course_detail' pk=object.pk %}">Возврат на главную страницу курса</a><br>
+
+<div>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p}}
+    <button type="submit">Удалить курс</button>
+  </form>
+</div>
+<a href="{% url 'education:courses_list' %}">Список курсов</a>
+
+
+{% endblock %}

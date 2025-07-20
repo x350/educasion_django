@@ -1,4 +1,4 @@
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
@@ -39,9 +39,19 @@ class CourseCreateView(CreateView):
 class CourseUpdateView(UpdateView):
     model = Course
     form_class = CourseForm
-    # fields = "__all__"
     template_name = "education/course_update.html"
 
+
+
+class CourseDeleteView(DeleteView):
+    model = Course
+    success_url = reverse_lazy('education:courses_list')
+
+    def form_valid(self, form):
+        success_url = self.get_success_url()
+        self.object.is_active = False
+        self.object.save()
+        return HttpResponseRedirect(success_url)
 
 class TeachersListView(ListView):
     model = Teacher
@@ -89,7 +99,7 @@ class CoursesListView(ListView):
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            return Course.objects.filter(is_active=True) # реализовать выбор курсов конкретного пользователя
+            return Course.objects.all() # реализовать выбор курсов конкретного пользователя
         else:
             return Course.objects.filter(is_active=True)
 
@@ -117,6 +127,23 @@ class LessonDetailView(DetailView):
     )
     template_name = "education/lesson_detail.html"
     context_object_name = 'lesson'
+
+
+# class LessonListView(ListView):
+#     queryset = Lesson.objects.filter()
+
+class LessonDeleteView(DeleteView):
+    model = Lesson
+    success_url = reverse_lazy('education:course_detail')
+
+
+    # def form_valid(self, form):
+    #     success_url = self.get_success_url()
+    #     self.object.is_active = False
+    #     self.object.save()
+    #     return HttpResponseRedirect(success_url)
+
+
 
 
 def register(request):

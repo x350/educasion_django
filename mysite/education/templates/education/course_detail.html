@@ -58,6 +58,9 @@
     <a href="{% url 'education:course_update' pk=course.pk %}">Редактировать курс</a>
 </div>
 <div>
+    <a href="{% url 'education:course_delete' pk=course.pk %}">Удалить курс</a>
+</div>
+<div>
     <a href="{% url 'education:courses_list' %}">Вернуться к списку курсов</a>
 </div>
 
