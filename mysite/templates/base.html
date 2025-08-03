@@ -47,8 +47,16 @@
         {% include 'include/_navbar.html' %}
 
         {% block sidebar %} SIDEBAR {% endblock %}
+<main>
+    <div class="container-fluid">
+        <div class="d-flex align-items=center py-5">
+            <div class="col-12 col-lg-7 col-lg-4 mx-auto">
+                {% block body %} CONTENT {% endblock %}
+            </div>
+        </div>
+    </div>
+</main>
 
-        {% block body %} CONTENT {% endblock %}
 
 
 

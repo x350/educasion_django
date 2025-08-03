@@ -8,7 +8,7 @@
 
 {% block body %}
 
-    <h1>Hello course!</h1>
+
 {% if course %}
 
 <ul>
@@ -40,8 +40,6 @@
             {% endfor %}
         </ul>
     </li>
-
-
 </ul>
 {% else %}
     <p>Нет ни одного курса</p>
@@ -53,6 +51,59 @@
         <li><a href="{{ item.get_absolute_url }}">{{ item.title }}</a> </li>
     {% endfor %}
     </ul>
+
+
+
+<div class="card m-3">
+      <h2 class="card-header">Курс: {{ course.title }} </h2>
+      <div class="card-body">
+        <p class="card-text">Категория курса: {{ course.category }}</p>
+        <p class="card-text">Описание курса: {{ course.description }}</p>
+        <p class="card-text">Курс создан: {{ course.created }}</p>
+        <p class="card-text">Курс обновлен: {{ course.update  }}</p>
+
+        <div class="card">
+            <div class="card-header">Ученики:</div>
+            <ul class="list-group list-group-flush">
+
+              {% for item in course.students.all %}
+                    {% if item.user.last_name %}
+                        <li class="list-group-item"><a href="{{ item.get_absolute_url }}">{{ item.user.first_name }} {{ item.user.last_name }}</a></li>
+                    {% else %}
+                        <li class="list-group-item"><a href="{{ item.get_absolute_url }}">{{ item.user.username }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header">Уроки курса:</div>
+            <ul class="list-group list-group-flush">
+
+               {% for item in course.lessons.all %}
+                <li class="list-group-item"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a> </li>
+               {% endfor %}
+            </ul>
+        </div>
+
+        <div class="card mt-3">
+          <div class="card-header">Кнопки:</div>
+        </div>
+
+
+      </div>
+</div>
+
+          <a href="{% url 'education:students_list' %}" class="btn btn-secondary mt-2">Перейти на страницу списка учеников</a>
+
+      </div>
+</div>
+
+
+
+
+
+
 
 <div>
     <a href="{% url 'education:course_update' pk=course.pk %}">Редактировать курс</a>

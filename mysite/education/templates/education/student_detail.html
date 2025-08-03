@@ -8,16 +8,22 @@
 
 {% block body %}
 
-    <h1>Hello student!</h1>
+<div class="card mx-3">
+      <h2 class="card-header">Курсы студента {{ student.user.username }}: {{ student.user.first_name }} {{ student.user.last_name }}</h2>
+      <div class="card-body">
+        <p class="card-title">Имя и фамилия студента: {{ student.user.first_name }} {{ student.user.last_name }}</p>
 
-    <h2> Курсы студента {{ student.user.username }}: {{ student.user.first_name }} {{ student.user.last_name }}</h2>
+        <ul class="list-group list-group-flush">
+          {% for item in student.courses.all %}
+            <li class="list-group-item">
+              <a href="{{ item.get_absolute_url }}">{{ item }}</a>
+            </li>
+          {% endfor %}
+        </ul>
 
-<ul>
-    {% for item in student.courses.all %}
-    <li>
-      <a href="{{ item.get_absolute_url }}">{{ item }}</a>
-    </li>
-    {% endfor %}
-</ul>
+          <a href="{% url 'education:students_list' %}" class="btn btn-secondary mt-2">Перейти на страницу списка учеников</a>
+
+      </div>
+</div>
 
 {% endblock %}

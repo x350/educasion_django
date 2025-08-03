@@ -8,19 +8,27 @@
 
 {% block body %}
 
-    <h1>Hello teachers!</h1>
+
+<div class="mx-3">
+    <h1>Наши преподаватели:</h1>
+</div>
 
 {% for item in teachers %}
 
-<ul>
-    <li>
-        <a href="{{ item.get_absolute_url }}">{{ item.user.username }}:</a> <p>{{ item.user.first_name }} {{ item.user.last_name}}</p>
-    </li>
+<div class="card m-3">
+      <h5 class="card-header">Ник преподавателя: {{ item.user.username }}</h5>
+      <div class="card-body">
+        <p class="card-title">Имя и фамилия преподавателя: {{ item.user.first_name }} {{ item.user.last_name}}</p>
 
-    <br>
-</ul>
-    {% empty %}
-<p> Нет преподавателей</p>
+        <a href="{{ item.get_absolute_url }}" class="btn btn-secondary mt-2">Перейти на страницу преподавателя</a>
+
+      </div>
+</div>
+
+  {% empty %}
+    <div class="card m-3">
+        <p> Преподавателей нет</p>
+    </div>
   {% endfor %}
 
 {% endblock %}

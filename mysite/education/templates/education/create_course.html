@@ -15,10 +15,17 @@
     {{ form.as_p }}
 
         <h3>Создание урока</h3>
+
     {{ lesson_formset.management_form }}
     {% for form in lesson_formset %}
         {{ form.as_p }}
     {% endfor %}
+
+    {% comment Vivod django-extra-views%}
+      {% for formset in inlines %}
+        {{ formset }}
+    {% endfor %}
+    {% endcomment %}
 
 
     <button type="submit">Создание курса</button>

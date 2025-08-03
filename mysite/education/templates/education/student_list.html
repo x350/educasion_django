@@ -8,19 +8,74 @@
 
 {% block body %}
 
-    <h1>Hello students!</h1>
+<div class="mx-3">
+    <h1>Наши студенты:</h1>
+</div>
 
 {% for item in students %}
 
-<ul>
-    <li>
-        <a href="{{ item.get_absolute_url }}">{{ item.user.username }}:</a> <p>{{ item.user.first_name }} {{ item.user.last_name}}</p>
-    </li>
+<div class="card m-3">
+      <h5 class="card-header">Ник студента: {{ item.user.username }}</h5>
+      <div class="card-body">
+        <p class="card-title">Имя и фамилия студента: {{ item.user.first_name }} {{ item.user.last_name}}</p>
 
-    <br>
-</ul>
-    {% empty %}
-<p> Нет стдудентов</p>
-  {% endfor %}
+        <a href="{{ item.get_absolute_url }}" class="btn btn-secondary mt-2">Перейти на страницу ученика</a>
+
+      </div>
+</div>
+{% empty %}
+    <div class="card mx-3">
+        <p> Студентов нет</p>
+    </div>
+{% endfor %}
+
+{% comment %}
+<div class="row">
+    <div class="col-12">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; первая</a>
+            <a href="?page={{ page_obj.previous_page_number }}">предыдущая</a>
+            {% endif %}
+
+            <span class="current">
+                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">следующая</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">последняя &raquo</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+{% endcomment %}
+
+<nav class="ms-3" aria-label="Навигация по страницам">
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link text-secondary" href="?page=1">&laquo; первая</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link text-secondary" href="?page={{ page_obj.previous_page_number }}">предыдущая</a>
+        </li>
+        {% endif %}
+
+        <li class="page-item text-secondary">
+            <a class="page-link text-secondary" href="#">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.</a>
+        </li>
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link text-secondary" href="?page={{ page_obj.next_page_number }}">следующая</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link text-secondary" href="?page={{ page_obj.paginator.num_pages }}">последняя &raquo</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+
 
 {% endblock %}

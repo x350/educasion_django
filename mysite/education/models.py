@@ -55,6 +55,12 @@ class Category(models.Model):
 
 
 class Course(models.Model):
+
+    class Meta:
+        verbose_name = 'Курс'
+        verbose_name_plural = 'Курсы'
+        ordering = ['-created']
+
     title = models.CharField(max_length=200, unique=True, verbose_name='Название курса')
     description = models.TextField(null=False, blank=True, verbose_name='Описание курса')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='courses')
@@ -70,18 +76,20 @@ class Course(models.Model):
     def __str__(self):
         return self.title
 
-    class Meta:
-        verbose_name = 'Курс'
-        verbose_name_plural = 'Курсы'
-        ordering = ['-created']
-
 
 class Lesson(models.Model):
     title = models.CharField(max_length=200, unique=True, verbose_name='Название урока')
     description = models.TextField(null=False, blank=True, verbose_name='Описание урока')
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='lessons')
     photo = models.ImageField(null=True, upload_to='photos/%Y/%m/%d/', blank=True)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='lessons', blank=True, null=True, verbose_name='Курс')
+    course = models.ForeignKey(Course,
+                               on_delete=models.CASCADE,
+                               related_name='lessons',
+                               blank=True,
+                               null=True,
+                               verbose_name='Курс',
+                               )
+
 
     def get_absolute_url(self):
         return reverse_lazy('education:lesson_detail', kwargs={'pk': self.pk})

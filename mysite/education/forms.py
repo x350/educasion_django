@@ -13,6 +13,10 @@ class UserLoginForm(AuthenticationForm):
 
 
 class UserRegisterForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password1', 'password2', 'first_name', 'last_name')
+
     username = forms.CharField(label='Имя пользователя',
                                widget=forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'}))
     password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
@@ -20,9 +24,7 @@ class UserRegisterForm(UserCreationForm):
     email = forms.EmailField(label='E-mail', widget=forms.EmailInput(attrs={'class': 'form-control'}))
     first_name = forms.CharField(label='Имя', widget=forms.TextInput(attrs={'class': 'form-control'}))
     last_name = forms.CharField(label='Фамилия', widget=forms.TextInput(attrs={'class': 'form-control'}))
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'password1', 'password2', 'first_name', 'last_name')
+
 
 
 # class StudentWidget(s2forms.ModelSelect2Widget):
@@ -42,6 +44,11 @@ class UserRegisterForm(UserCreationForm):
 #     ]
 #
 class CourseForm(forms.ModelForm):
+
+    class Meta:
+        model = Course
+        fields = "__all__"
+
     students = forms.ModelMultipleChoiceField(
         queryset=Student.objects.all(),
         widget=Select2MultipleWidget,
@@ -55,14 +62,12 @@ class CourseForm(forms.ModelForm):
         label='Уроки',
         required=False,
     )
-    class Meta:
-        model = Course
-        fields = "__all__"
+
 
 LessonFormSet = inlineformset_factory(
     Course,
     Lesson,
-    fields=('title', 'description', 'teacher', 'photo', ),
+    fields=('title', 'description', 'teacher', 'photo',),
     extra=1,
     can_delete=False,
 )

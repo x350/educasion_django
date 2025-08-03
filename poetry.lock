@@ -65,6 +65,21 @@ files = [
 django = "*"
 
 [[package]]
+name = "django-extra-views"
+version = "0.16.0"
+description = "Extra class-based views for Django"
+optional = false
+python-versions = ">=3.5"
+groups = ["main"]
+files = [
+    {file = "django_extra_views-0.16.0-py2.py3-none-any.whl", hash = "sha256:af990d1779813b728231e94bcc703614fef60015c4c31d53185c5f4f898a37be"},
+    {file = "django_extra_views-0.16.0.tar.gz", hash = "sha256:7f8e07bd6c9388816a7c08d752661172d4078758c2079fc0cadddfcf5cd38ae3"},
+]
+
+[package.dependencies]
+Django = ">=2.1"
+
+[[package]]
 name = "django-nested-admin"
 version = "4.1.1"
 description = "Django admin classes that allow for nested inlines"
@@ -390,4 +405,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12"
-content-hash = "2833f6c1816051f577dfd5d77b42063f9a403d1adda7c70bc7d561b90a4f49c7"
+content-hash = "1a0ac191ba846532c3a30d38bfa17b2658f065abe7dd2c47405158a7d681f343"
