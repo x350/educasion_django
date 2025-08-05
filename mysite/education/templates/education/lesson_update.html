@@ -8,24 +8,20 @@
 
 {% block body %}
 
-    <h1>Change lessons!</h1>
-{% if content %}
+<div class="card m-3">
+  <h1 class="card-header"> Редактирование урока {{ lesson.title }}</h1>
+    <div class="card-body">
 
-{% for item in content %}
+    <form method="post">
+      {% csrf_token %}
+      {{ form }}
+      {% for formset in inlines %}
+        {{ formset }}
+      {% endfor %}
 
-<ul>
-    <li>
-      <p>{{ item.title }}</p>
-    </li>
-    <li>
-      <p>{{ item.description }}</p>
-    </li>
-    <li>
-      <p>{{ item.teacher.username}}</p>
-    </li>
-    <br>
-</ul>
-  {% endfor %}
+    <button type="submit" class="btn btn-secondary mt-2">Редактирование урока</button>
+  </form>
 
-{% endif %}
+        <a href="{% url 'education:course_detail' pk=lesson.course.pk %}" class="btn btn-secondary mt-2">На главную страницу курса</a>
+</div>
 {% endblock %}

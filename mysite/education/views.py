@@ -16,28 +16,6 @@ from extra_views import InlineFormSetFactory, CreateWithInlinesView, UpdateWithI
 
 # Create your views here.
 
-# class CourseInLine():
-#     form_class = CourseForm
-#     model = Course
-#     template_name = 'education/course_create.html'
-#
-#     def form_valid(self, form):
-#         named_formsets = self.get_named_formsets()
-#         if not all((x.is_valid() for x in named_formsets.values())):
-#             return self.render_to_response(self.get_context_data(form=form))
-#
-#         self.object = form.save()
-#
-#         for name, formset in named_formsets.items():
-#             formset_save_func = getattr(self, 'formset_{0}_valid'.format(name), None)
-#             if formset_save_func is not None:
-#                 formset_save_func(formset)
-#             else:
-#                 formset.save()
-
-#________________________________________________________________________
-
-
 # class UserAccessMixin(PermissionRequiredMixin):
 #     def dispatch(self, request, *args, **kwargs):
 #         if not self.request.user.is_authenticated:
@@ -55,14 +33,14 @@ class LessonItemInline(InlineFormSetFactory):
     fields = '__all__'
     form_class = LessonForm
     factory_kwargs = {'extra': 1}
-#
-#
+
+
 class LessonFilesItemInline(InlineFormSetFactory):
     model = LessonFiles
     fields = '__all__'
     factory_kwargs = {'extra': 1}
 
-#
+
 class CourseCreateView(CreateWithInlinesView):
     model = Course
     form_class = CourseForm
@@ -70,17 +48,13 @@ class CourseCreateView(CreateWithInlinesView):
     # fields = '__all__'
     template_name = 'education/course_create.html'
     # success_url = reverse_lazy('education:courses_list')
+
     def get_success_url(self):
         return self.object.get_absolute_url()
 
     def forms_valid(self, form, inlines):
-        """
-        If the form and formsets are valid, save the associated models.
-        """
         response = self.form_valid(form)
-        print(inlines)
         for formset in inlines:
-            print(formset)
             formset.save()
         return response
 
@@ -93,135 +67,11 @@ class CourseUpdateView(UpdateWithInlinesView):
     template_name = 'education/course_update.html'
     success_url = reverse_lazy('education:courses_list')
 
-# ------------------------------------------
-
-# class CourseUpdateView(SingleObjectMixin, FormView):
-#     model = Course
-#     form_class = CourseForm
-#     # fields = '__all__' #'title', 'description', 'category', 'is_active', #
-#     template_name = 'education/course_update.html'
-#     success_url = reverse_lazy('education:courses_list')
-#
-#     def get(self, request, *args, **kwargs):
-#         self.object = self.get_object(queryset=Course.objects.all())
-#         return super().get(request, *args, **kwargs)
-#
-#     def post(self, request, *args, **kwargs):
-#         self.object = self.get_object(queryset=Course.objects.all())
-#         return super().post(request, *args, **kwargs)
-#
-#     def get_form(self, form_class=None):
-#         return LessonFormSet(**self.get_form_kwargs(), instance=self.object)
-#     def form_valid(self, form):
-#         form.save()
-#
-#         messages.add_message(
-#             self.request,
-#             messages.SUCCESS,
-#             'Create!!!'
-#         )
-#         return HttpResponseRedirect(self.get_success_url())
-#
-#     def get_success_url(self):
-#         return self.object.get_absolute_url()
-#
-#
-#
-#
-#
-#
-# class CourseCreateView(CreateView):
-#     model = Course
-#     form_class = CourseForm
-#     # fields = 'title', 'description', 'category', 'is_active', #'__all__'
-#     template_name = 'education/course_create.html'
-#     success_url = reverse_lazy('education:courses_list')
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         if self.request.POST:
-#             context['lesson_formset'] = LessonFormSet(self.request.POST)
-#         else:
-#             context['lesson_formset'] = LessonFormSet()
-#             # context['lesson_formset'] = LessonFilesFormSet()
-#         return context
-#
-#
-#     def form_valid(self, form):
-#         context = self.get_context_data()
-#         lesson_formset = context['lesson_formset']
-#         if lesson_formset.is_valid() and form.is_valid():
-#             print(self.object)
-#             self.object = form.save()
-#             lesson_formset.instance = self.object
-#             lesson_formset.save()
-#             return super().form_valid(form)
-#         return self.render_to_response(self.get_context_data(form=form))
-
-
-
-    # def get(self, request, *args, **kwargs):
-    #     self.object = None
-    #     form_class = self.get_form_class()
-    #     form = self.get_form(form_class)
-    #     lesson_form = LessonFormSet()
-    #     self.render_to_response(self.get_context_data(
-    #         form=form,
-    #         lesson_form=lesson_form,
-    #     ))
-
-
-
-# ________________________________________________________________
-
-    # def post(self, request, *args, **kwargs):
-    #     self.object = None
-    #     form_class = self.get_form_class()
-    #     form = self.get_form(form_class)
-    #     lesson_form = LessonFormSet()
-    #     if (form.is_valid() and lesson_form.is_valid()):
-    #         return self.form_valid(form, lesson_form)
-    #     else:
-    #         return self.form_invalid(form, lesson_form)
-
-
-    # def form_valid(self, form, lesson_form):
-    #     self.object = form.save()
-    #     lesson_form.instance = self.object
-    #     lesson_form.save()
-    #     return  HttpResponseRedirect(self.get_success_url())
-    #
-    #
-    # def form_invalid(self, form, lesson_form):
-    #     return self.render_to_response(
-    #         self.get_context_data(
-    #             form=form,
-    #             lesson_form=lesson_form,
-    #         )
-    #     )
-
-
-
-
-
-
-# class CourseUpdateView(UpdateView):
-#     model = Course
-#     form_class = CourseForm
-#     template_name = "education/course_update.html"
-
-
-
 
 class CourseDeleteView(DeleteView):
     model = Course
     success_url = reverse_lazy('education:courses_list')
 
-    # def form_valid(self, form):
-    #     success_url = self.get_success_url()
-    #     self.object.is_active = False
-    #     self.object.save()
-    #     return HttpResponseRedirect(success_url)
 
 class TeachersListView(ListView):
     model = Teacher
@@ -248,6 +98,7 @@ class StudentsListView(ListView):
     #     .select_related("user")
     # )
 
+
 class StudentDetailView(DetailView):
     queryset = (
         Student.objects
@@ -256,6 +107,7 @@ class StudentDetailView(DetailView):
     )
     context_object_name = 'student'
     template_name = "education/student_detail.html"
+
 
 class CoursesListView(ListView):
     model = Course
@@ -285,8 +137,6 @@ class CourseDetailView(DetailView):
     model = Course
     template_name = "education/course_detail.html"
     context_object_name = 'course'
-
-
 
 
 class LessonListView(ListView):
@@ -320,14 +170,10 @@ class LessonDetailView(DetailView):
     context_object_name = 'lesson'
 
 
-# class LessonListView(ListView):
-#     queryset = Lesson.objects.filter()
-
-# class LessonCreate(CreateView):
-
-class LessonUpdateView(UpdateView):
+class LessonUpdateView(UpdateWithInlinesView):
     model = Lesson
     template_name = 'education/lesson_update.html'
+    inlines = [LessonFilesItemInline]
     fields = '__all__'
     success_url = reverse_lazy('education:lesson_detail')
     context_object_name = 'lesson'

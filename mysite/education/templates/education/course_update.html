@@ -8,28 +8,14 @@
 
 {% block body %}
 <h1>Редактирование курса</h1>
-<div>
-  <form method="post">
-    {% csrf_token %}
-<p>form</p>
-    {{ form.as_p }}
-<p>end form</p>
+</div>
+<form method="post">
+  {% csrf_token %}
+  {{ form }}
 
-      <p>formset</p>
+  {% for formset in inlines %}
     {{ formset }}
-<p>end formset</p>
-
-            <p>lesson_formset</p>
-    {{ lesson_formset }}
-<p>end lesson_formset</p>
-
-
-        <h3>Редактирование урока</h3>
-    {{ lesson_formset.management_form }}
-    {% for form in lesson_formset %}
-        {{ form.as_p }}
-    {% endfor %}
-
+  {% endfor %}
 
     <button type="submit">Редактирование курса</button>
   </form>
