@@ -9,26 +9,21 @@
 {% block body %}
 <h1>Создание курса</h1>
 <div>
-  <form method="post">
-    {% csrf_token %}
+<form method="post">
+  {% csrf_token %}
+  {{ form }}
 
-    {{ form.as_p }}
+  {% for formset in inlines %}
+    {{ formset }}
+  {% endfor %}
 
-        <h3>Создание урока</h3>
-
-    {{ lesson_formset.management_form }}
-    {% for form in lesson_formset %}
-        {{ form.as_p }}
-    {% endfor %}
-
-    {% comment Vivod django-extra-views%}
-      {% for formset in inlines %}
-        {{ formset }}
-    {% endfor %}
-    {% endcomment %}
+  <input type="submit" value="Submit" />
+</form>
 
 
-    <button type="submit">Создание курса</button>
+
+    <button class="btn btn-secondary mt-2" type="submit">Создание курса</button>
+
   </form>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

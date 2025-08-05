@@ -8,52 +8,6 @@
 
 {% block body %}
 
-
-{% if course %}
-
-<ul>
-    <li>
-      <p>{{ course.category }}</p>
-    </li>
-    <li>
-      <p>{{ course.title }}</p>
-    </li>
-    <li>
-      <p>{{ course.description }}</p>
-    </li>
-    <li>
-      <p>Курс создан {{ course.created }}</p>
-    </li>
-    <li>
-      <p>Курс обновлен {{ course.update }}</p>
-    </li>
-
-    <li>
-        <h3>Ученики курса:</h3>
-        <ul>
-            {% for item in course.students.all %}
-                {% if item.user.last_name %}
-                <li><a href="{{ item.get_absolute_url }}">{{ item.user.first_name }} {{ item.user.last_name }}</a></li>
-                {% else %}
-                <li><a href="{{ item.get_absolute_url }}">{{ item.user.username }}</a></li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-    </li>
-</ul>
-{% else %}
-    <p>Нет ни одного курса</p>
-{% endif %}
-
- <h4>Уроки курса:</h4>
-    <ul>
-    {% for item in course.lessons.all %}
-        <li><a href="{{ item.get_absolute_url }}">{{ item.title }}</a> </li>
-    {% endfor %}
-    </ul>
-
-
-
 <div class="card m-3">
       <h2 class="card-header">Курс: {{ course.title }} </h2>
       <div class="card-body">
@@ -88,31 +42,13 @@
 
         <div class="card mt-3">
           <div class="card-header">Кнопки:</div>
+             <a href="{% url 'education:courses_list' %}" class="btn btn-secondary mt-2">Перейти на страницу списка курсов</a>
+             <a href="{% url 'education:course_update' pk=course.pk %}" class="btn btn-secondary mt-2">Редактировать курс</a>
+             <a href="{% url 'education:course_delete' pk=course.pk %}" class="btn btn-secondary mt-2">Удалить курс</a>
         </div>
 
 
       </div>
-</div>
-
-          <a href="{% url 'education:students_list' %}" class="btn btn-secondary mt-2">Перейти на страницу списка учеников</a>
-
-      </div>
-</div>
-
-
-
-
-
-
-
-<div>
-    <a href="{% url 'education:course_update' pk=course.pk %}">Редактировать курс</a>
-</div>
-<div>
-    <a href="{% url 'education:course_delete' pk=course.pk %}">Удалить курс</a>
-</div>
-<div>
-    <a href="{% url 'education:courses_list' %}">Вернуться к списку курсов</a>
 </div>
 
 {% endblock %}

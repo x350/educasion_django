@@ -86,3 +86,11 @@ class CourseAdmin(NestedModelAdmin):
         StudentInline,
         LessonInLine,
     ]
+@admin.register(Lesson)
+class LessonAdmin(NestedModelAdmin):
+    list_display =  "pk", "title", "description", "teacher", "photo", "course"
+    list_display_links = "title",
+    inlines = [
+        LessonFilesInline,
+    ]
+

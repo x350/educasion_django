@@ -1,4 +1,5 @@
 from django import forms
+from django.forms.models import BaseInlineFormSet
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django_select2.forms import Select2MultipleWidget, Select2Widget
@@ -56,27 +57,57 @@ class CourseForm(forms.ModelForm):
         required=False,
 
     )
-    lesson = forms.ModelMultipleChoiceField(
-        queryset=Lesson.objects.all(),
-        widget=Select2MultipleWidget,
-        label='Уроки',
-        required=False,
-    )
+    # lessons = forms.ModelMultipleChoiceField(
+    #     queryset=Lesson.objects.all(),
+    #     widget=Select2MultipleWidget,
+    #     label='Уроки',
+    #     required=False,
+    # )
 
+
+class LessonForm(forms.ModelForm):
+    class Meta:
+        model = Lesson
+        fields ='__all__'
+        widgets = {
+            'title': forms.TextInput(
+                attrs={'class': 'form-control'},
+            ),
+            'description': forms.Textarea(
+                attrs={'class': 'form-control'},
+            ),
+        }
+
+class LessonFilesForm(forms.ModelForm):
+    class Meta:
+        model = LessonFiles
+        fields = '__all__'
+        widgets = {
+            'description': forms.Textarea(
+                attrs={'class': 'form-control'},
+            ),
+        }
+
+class BaseChildrenFormset(BaseInlineFormSet):
+    pass
 
 LessonFormSet = inlineformset_factory(
     Course,
     Lesson,
-    fields=('title', 'description', 'teacher', 'photo',),
+    # fields=('title', 'description', 'teacher', 'photo', ),
+    form=LessonForm,
     extra=1,
-    can_delete=False,
+    formset=BaseChildrenFormset,
+    can_delete=True,
 )
 
 LessonFilesFormSet = inlineformset_factory(
     Lesson,
     LessonFiles,
-    fields=('lesson', 'file', 'description'),
+    # fields=('lesson', 'file', 'description'),
+    form=LessonFilesForm,
     extra=1,
+    formset=BaseChildrenFormset,
     can_delete=False,
-
+    fk_name='lesson'
 )

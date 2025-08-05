@@ -7,25 +7,63 @@
 {% endblock %}
 
 {% block body %}
+<div class="mx-3">
+    <h1>Наши уроки</h1>
+</div>
 
-    <h1>Hello lessons!</h1>
-{% if content %}
 
-{% for item in content %}
+<div>
+{% for item in lessons %}
 
-<ul>
-    <li>
-      <p>{{ item.title }}</p>
-    </li>
-    <li>
-      <p>{{ item.description }}</p>
-    </li>
-    <li>
-      <p>{{ item.teacher.username}}</p>
-    </li>
-    <br>
-</ul>
-  {% endfor %}
+   <div class="card m-3">
+      <h5 class="card-header">Название урока: {{ item.title }}</h5>
+      <div class="card-body">
+          {% if item.photo %}
+        <img src="{{ item.photo.url }}" class="img-fluid mb-3" alt="Картинка урока {{ item.title }}">
+          {% endif %}
+        <p class="card-text">Описание урока: {{ item.description }}</p>
+        <p class="card-text">Преподаватель урока: <a href="{% url 'education:teacher_detail' pk=item.teacher.pk %}">{{ item.teacher }}</a> </p>
+        <p class="card-text">Урок из курса: <a href="{% url 'education:course_detail' pk=item.course.pk %}">{{ item.course }}</a> </p>
+        <p class="card-text">Описание урока: {{ item.description }}</p>
 
-{% endif %}
+        <a href="{{ item.get_absolute_url }}" class="btn btn-secondary mt-2">Перейти на страницу урока</a>
+
+      </div>
+   </div>
+
+
+{% empty %}
+<div class="card m-3">
+    <p> Курсов нет</p>
+</div>
+{% endfor %}
+</div>
+
+<nav class="ms-3 mt-3" aria-label="Навигация по страницам">
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link text-secondary" href="?page=1">&laquo; первая</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link text-secondary" href="?page={{ page_obj.previous_page_number }}">предыдущая</a>
+        </li>
+        {% endif %}
+
+        <li class="page-item text-secondary">
+            <a class="page-link text-secondary" href="#">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.</a>
+        </li>
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link text-secondary" href="?page={{ page_obj.next_page_number }}">следующая</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link text-secondary" href="?page={{ page_obj.paginator.num_pages }}">последняя &raquo</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+
+
 {% endblock %}

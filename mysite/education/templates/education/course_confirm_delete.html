@@ -8,7 +8,7 @@
 
 {% block body %}
 
-    <h1>Вы уверены, что хотите удалить курс {{ object.name }}?</h1>
+    <h1>Вы уверены, что хотите удалить курс {{ object.title }}?</h1>
     <br>
 
 <a href="{% url 'education:course_detail' pk=object.pk %}">Возврат на главную страницу курса</a><br>

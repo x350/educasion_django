@@ -1,10 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+<!--{% load static %}-->
 
-</body>
-</html>
+{% block title %} Confirm delete {{ lesson.title }}{% endblock %}
+
+{% block sidebar %}
+{% endblock %}
+
+{% block body %}
+
+    <h1>Вы уверены, что хотите удалить урок {{ lesson.name }}?</h1>
+    <br>
+
+<a href="{% url 'education:lesson_detail' pk=object.pk %}">Возврат на главную страницу урока</a><br>
+
+<div>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p}}
+    <button type="submit">Удалить урок</button>
+  </form>
+</div>
+<a href="{% url 'education:course_detail' pk=lesson.course.pk %}">Страница курса</a>
+
+
+{% endblock %}

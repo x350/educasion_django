@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'education.apps.EducationConfig',
     'nested_admin',
     'django_select2',
+    'extra_views',
 ]
 
 MIDDLEWARE = [
