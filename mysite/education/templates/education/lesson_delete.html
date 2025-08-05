@@ -1,26 +1,28 @@
 {% extends 'base.html' %}
 <!--{% load static %}-->
 
-{% block title %} Confirm delete {{ lesson.title }}{% endblock %}
+{% block title %} Confirm delete {{ object.title }}{% endblock %}
 
 {% block sidebar %}
 {% endblock %}
 
 {% block body %}
 
-    <h1>Вы уверены, что хотите удалить урок {{ lesson.name }}?</h1>
-    <br>
+<div class="card m-3">
+  <h1 class="card-header">Вы уверены, что хотите удалить урок "{{ object.title }}"?</h1>
 
-<a href="{% url 'education:lesson_detail' pk=object.pk %}">Возврат на главную страницу урока</a><br>
+  <div class="card-body">
+  <a href="{% url 'education:lesson_detail' pk=object.pk %}" class="btn btn-secondary mt-2">Возврат на главную страницу урока</a>
 
-<div>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p}}
-    <button type="submit">Удалить урок</button>
-  </form>
-</div>
-<a href="{% url 'education:course_detail' pk=lesson.course.pk %}">Страница курса</a>
+    <div>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p}}
+        <button type="submit" class="btn btn-secondary mt-2">Удалить урок "{{ object.title }}"?</button>
+      </form>
+    </div>
+
+    <a href="{% url 'education:course_detail' pk=object.course.pk %}" class="btn btn-secondary mt-2">Курс "{{ object.course }}"</a>
 
 
 {% endblock %}

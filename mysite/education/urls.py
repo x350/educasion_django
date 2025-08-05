@@ -3,7 +3,7 @@ from django.urls import path, include, re_path
 from django.views.generic import TemplateView
 from .views import register, user_login, user_logout, index, CoursesListView, CourseDetailView, LessonDetailView, \
     StudentsListView, StudentDetailView, TeachersListView, TeacherDetailView, CourseCreateView, CourseUpdateView, \
-    CourseDeleteView, LessonListView, LessonUpdateView
+    CourseDeleteView, LessonListView, LessonUpdateView, LessonDeleteView
 
 app_name = 'education'
 
@@ -28,7 +28,7 @@ urlpatterns = [
     path("lessons/", LessonListView.as_view(), name="lessons_list"),
     path("lesson/<int:pk>/", LessonDetailView.as_view(), name="lesson_detail"),
     path("lesson/<int:pk>/update/", LessonUpdateView.as_view(), name="lesson_update"),
-    path("lesson/<int:pk>/delete/", LessonUpdateView.as_view(), name="lesson_delete"),
+    path("lesson/<int:pk>/delete/", LessonDeleteView.as_view(), name="lesson_delete"),
 
     re_path(r'^_nested_admin/', include('nested_admin.urls')),
 

@@ -336,9 +336,10 @@ class LessonUpdateView(UpdateView):
 class LessonDeleteView(DeleteView):
     model = Lesson
     template_name = 'education/lesson_delete.html'
-    fields = '__all__'
-    success_url = reverse_lazy('education:course_list')
-    context_object_name = 'lesson'
+    # fields = '__all__'
+    def get_success_url(self):
+        return reverse_lazy('education:course_detail', kwargs={'pk': self.object.course.pk})
+    # context_object_name = 'lesson'
 
 
     # def form_valid(self, form):

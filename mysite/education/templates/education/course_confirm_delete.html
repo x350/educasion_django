@@ -8,19 +8,21 @@
 
 {% block body %}
 
-    <h1>Вы уверены, что хотите удалить курс {{ object.title }}?</h1>
-    <br>
+<div class="card m-3">
+  <h1 class="card-header">Вы уверены, что хотите удалить курс {{ object.title }}?</h1>
 
-<a href="{% url 'education:course_detail' pk=object.pk %}">Возврат на главную страницу курса</a><br>
+  <div class="card-body">
+  <a href="{% url 'education:course_detail' pk=object.pk %}" class="btn btn-secondary mt-2">Возврат на главную страницу курса</a>
 
-<div>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p}}
-    <button type="submit">Удалить курс</button>
-  </form>
-</div>
-<a href="{% url 'education:courses_list' %}">Список курсов</a>
+    <div>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p}}
+        <button type="submit" class="btn btn-secondary mt-2">Удалить курс {{ object.title }}?</button>
+      </form>
+    </div>
+
+    <a href="{% url 'education:courses_list' %}" class="btn btn-secondary mt-2">Список курсов</a>
 
 
 {% endblock %}
