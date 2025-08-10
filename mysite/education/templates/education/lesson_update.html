@@ -24,4 +24,8 @@
 
         <a href="{% url 'education:course_detail' pk=lesson.course.pk %}" class="btn btn-secondary mt-2">На главную страницу курса</a>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{{ form.media.js }}
+
 {% endblock %}

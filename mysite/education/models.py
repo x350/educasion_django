@@ -108,7 +108,7 @@ class Lesson(models.Model):
 
 
 def lesson_files_path(instance: "LessonFiles", filename: str) -> str:
-    return "courses/course_{pk}/files/{filename}".format(
+    return "lessons/lessons_{pk}/files/{filename}".format(
         pk=instance.lesson.pk,
         filename=filename
     )

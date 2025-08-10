@@ -8,26 +8,25 @@
 {% block body %}
 
     <h1>Создание урока!</h1>
-div>
+<div>
   <form method="post">
     {% csrf_token %}
-
+    {{ form.management_form }}
     {{ form.as_p }}
 
         <h3>Добавление файлов.</h3>
-    {{ lesson_formset.management_form }}
-    {% for form in lesson_formset %}
-        {{ form.as_p }}
+    {% for formset in inlines %}
+        {{ formset }}
     {% endfor %}
 
 
-    <button type="submit">Создание курса</button>
+    <button type="submit">Создание урока</button>
   </form>
 </div>
 
-<a href="{% url 'education:course_detail' pk=lesson.course.pk %}">На главную страницу курса</a>
 <a href="{% url 'education:courses_list' %}">Вернуться к списку курсов</a>
 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{{ form.media.js }}
 
 {% endblock %}

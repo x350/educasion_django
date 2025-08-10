@@ -7,25 +7,26 @@
 {% endblock %}
 
 {% block body %}
-<h1 xmlns="http://www.w3.org/1999/html">Создание курса</h1>
-<div>
-<form method="post">
+<div class="card m-3">
+  <h1 class="card-header">Создание курса</h1>
+  <div class="card-body">
+  <form method="post">
   {% csrf_token %}
   {{ form }}
-
+  <h2 class="card-header">Добавление урока</h2>
   {% for formset in inlines %}
     {{ formset }}
   {% endfor %}
   <button class="btn btn-secondary mt-2" type="submit">Создание курса</button>
-
-</form>
-
-
-
-
-
   </form>
+
+    <div class="card m-3">
+      <a href="{% url 'education:courses_list' %}" class="btn btn-secondary mt-2">Вернуться к списку курсов</a>
+    </div>
+  </div>
 </div>
 
-<a href="{% url 'education:courses_list' %}">Вернуться к списку курсов</a>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{{ form.media.js }}
 {% endblock %}

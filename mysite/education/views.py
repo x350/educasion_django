@@ -3,6 +3,7 @@ from django.contrib.auth.views import redirect_to_login
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.views.generic.base import TemplateResponseMixin, View
 from django.views.generic.detail import SingleObjectMixin
 
 from .forms import UserRegisterForm, UserLoginForm
@@ -35,10 +36,34 @@ class LessonItemInline(InlineFormSetFactory):
     factory_kwargs = {'extra': 1}
 
 
-class LessonFilesItemInline(InlineFormSetFactory):
-    model = LessonFiles
-    fields = '__all__'
-    factory_kwargs = {'extra': 1}
+class CoursesListView(ListView):
+    model = Course
+    template_name = "education/course_list.html"
+    context_object_name = 'courses'
+    # extra_context = {'title': 'Наши курсы'}
+    paginate_by = 3
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Наши курсы'
+        return context
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return Course.objects.all() # реализовать выбор курсов конкретного пользователя
+        else:
+            return Course.objects.filter(is_active=True)
+
+    # def dispatch(self, request, *args, **kwargs):
+    #     if not request.user.is_authenticated:
+    #         return HttpResponseForbidden()
+    #     return super(CoursesView, self).dispatch(request, *args, **kwargs)
+
+
+class CourseDetailView(DetailView):
+    model = Course
+    template_name = "education/course_detail.html"
+    context_object_name = 'course'
 
 
 class CourseCreateView(CreateWithInlinesView):
@@ -52,11 +77,12 @@ class CourseCreateView(CreateWithInlinesView):
     def get_success_url(self):
         return self.object.get_absolute_url()
 
-    def forms_valid(self, form, inlines):
-        response = self.form_valid(form)
-        for formset in inlines:
-            formset.save()
-        return response
+
+    # def forms_valid(self, form, inlines):
+    #     response = self.form_valid(form)
+    #     for formset in inlines:
+    #         formset.save()
+    #     return response
 
 
 class CourseUpdateView(UpdateWithInlinesView):
@@ -66,6 +92,7 @@ class CourseUpdateView(UpdateWithInlinesView):
     # fields = '__all__'
     template_name = 'education/course_update.html'
     success_url = reverse_lazy('education:courses_list')
+    context_object_name = 'course'
 
 
 class CourseDeleteView(DeleteView):
@@ -109,36 +136,6 @@ class StudentDetailView(DetailView):
     template_name = "education/student_detail.html"
 
 
-class CoursesListView(ListView):
-    model = Course
-    template_name = "education/course_list.html"
-    context_object_name = 'courses'
-    # extra_context = {'title': 'Наши курсы'}
-    paginate_by = 3
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Наши курсы'
-        return context
-
-    def get_queryset(self):
-        if self.request.user.is_authenticated:
-            return Course.objects.all() # реализовать выбор курсов конкретного пользователя
-        else:
-            return Course.objects.filter(is_active=True)
-
-    # def dispatch(self, request, *args, **kwargs):
-    #     if not request.user.is_authenticated:
-    #         return HttpResponseForbidden()
-    #     return super(CoursesView, self).dispatch(request, *args, **kwargs)
-
-
-class CourseDetailView(DetailView):
-    model = Course
-    template_name = "education/course_detail.html"
-    context_object_name = 'course'
-
-
 class LessonListView(ListView):
     model = Lesson
     template_name = "education/lesson_list.html"
@@ -170,19 +167,70 @@ class LessonDetailView(DetailView):
     context_object_name = 'lesson'
 
 
+class LessonFilesItemInline(InlineFormSetFactory):
+    model = LessonFiles
+    fields = ['lesson', 'file', 'description']
+    factory_kwargs = {'extra': 2,}
+
+
+class LessonCreateView(CreateWithInlinesView):
+    model = Lesson
+    inlines = [LessonFilesItemInline]
+    fields = ['title', 'course', 'description', 'teacher', 'photo', ]
+    template_name = 'education/lesson_create.html'
+    context_object_name = 'lesson'
+
+    def get_success_url(self):
+        return reverse_lazy('education:lesson_detail', kwargs={'pk': self.object.course.pk})
+        # return reverse_lazy('education:lessons_list')
+
+
 class LessonUpdateView(UpdateWithInlinesView):
     model = Lesson
     template_name = 'education/lesson_update.html'
     inlines = [LessonFilesItemInline]
     fields = '__all__'
-    success_url = reverse_lazy('education:lesson_detail')
+    # success_url = reverse_lazy('education:lesson_detail')
     context_object_name = 'lesson'
+    # factory_kwargs = {'fk_field': 'lesson'}
+
+    def get_success_url(self):
+        return reverse_lazy('education:lesson_detail', kwargs={'pk': self.object.pk})
+
+
+# class LessonUpdateView(UpdateView):
+#     # model = Lesson
+#     queryset = Lesson.objects.prefetch_related("files")
+#     template_name = 'education/lesson_update.html'
+#     # form_class = LessonForm
+#     inlines = [LessonFilesItemInline]
+#     context_object_name = 'lesson'
+#     fields = '__all__'
+#
+#
+#     def get_success_url(self):
+#         return reverse_lazy('education:lesson_detail', kwargs={'pk': self.object.pk})
+
+
+
+    # def post(self, request, *args, **kwargs):
+    #     formset = self.get_form(data=request.POST)
+    #     print(formset)
+    #     if formset.is_valid():
+    #         formset.save()
+    #         return redirect('education:lesson_detail', kwargs={'pk': self.object.pk})
+    #     return self.render_to_response(
+    #         {
+    #             'formset': formset
+    #         }
+    #     )
 
 
 class LessonDeleteView(DeleteView):
     model = Lesson
     template_name = 'education/lesson_delete.html'
     # fields = '__all__'
+
     def get_success_url(self):
         return reverse_lazy('education:course_detail', kwargs={'pk': self.object.course.pk})
     # context_object_name = 'lesson'
@@ -193,9 +241,6 @@ class LessonDeleteView(DeleteView):
     #     self.object.is_active = False
     #     self.object.save()
     #     return HttpResponseRedirect(success_url)
-
-
-
 
 
 def register(request):

@@ -7,18 +7,36 @@
 {% endblock %}
 
 {% block body %}
-<h1>Редактирование курса</h1>
-</div>
-<form method="post">
-  {% csrf_token %}
-  {{ form }}
 
-  {% for formset in inlines %}
-    {{ formset }}
-  {% endfor %}
 
-    <button type="submit">Редактирование курса</button>
+<div class="card m-3">
+  <h1 class="card-header">Редактирование курса "{{ course.title }}"?</h1>
+  <div class="card-body">
+    <form method="post">
+    {% csrf_token %}
+    {{ form }}
+    {{ form.management_form }}
+    {% for formset in inlines %}
+      <div class="card-body">
+      <div class="card-text">
+        <h2 class="card-header">Добавление и удаление уроков</h2>
+      </div>
+      {{ formset }}
+      {{ formset.management_form }}
+
+      </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-secondary mt-2">Редактирование курса</button>
   </form>
+  </div>
+  <div class="card m-3">
+    <a href="{% url 'education:course_detail' pk=course.pk %}" class="btn btn-secondary mt-2">Вернуться к курсу "{{ course.title }}"</a>
+    <a href="{% url 'education:courses_list' %}" class="btn btn-secondary mt-2">Вернуться к списку курсов</a>
+  </div>
+
 </div>
-<a href="{% url 'education:courses_list' %}">Вернуться к списку курсов</a>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{{ form.media.js }}
 {% endblock %}
