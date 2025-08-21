@@ -44,6 +44,7 @@
           <div class="card-header">Кнопки:</div>
              <a href="{% url 'education:courses_list' %}" class="btn btn-secondary mt-2">Перейти на страницу списка курсов</a>
              <a href="{% url 'education:course_update' pk=course.pk %}" class="btn btn-secondary mt-2">Редактировать курс</a>
+             <a href="{% url 'education:lesson_create' pk=course.pk %}" class="btn btn-secondary mt-2">Добавить урок</a>
              <a href="{% url 'education:course_delete' pk=course.pk %}" class="btn btn-secondary mt-2">Удалить курс</a>
         </div>
 

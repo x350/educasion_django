@@ -10,7 +10,7 @@
 <div class="card m-3">
   <h1 class="card-header">Создание курса</h1>
   <div class="card-body">
-  <form method="post">
+  <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
   {{ form }}
   <h2 class="card-header">Добавление урока</h2>

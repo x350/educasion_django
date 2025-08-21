@@ -28,7 +28,7 @@
 
         <div class="card mt-3">
           <div class="card-header">Кнопки:</div>
-             <a href="{% url 'education:courses_list' %}" class="btn btn-secondary mt-2">Перейти на страницу списка курсов</a>
+             <a href="{% url 'education:course_detail' pk=lesson.course.pk %}" class="btn btn-secondary mt-2">Перейти на страницу курса</a>
              <a href="{% url 'education:lesson_update' pk=lesson.pk %}" class="btn btn-secondary mt-2">Редактировать урок</a>
              <a href="{% url 'education:lesson_delete' pk=lesson.pk %}" class="btn btn-secondary mt-2">Удалить урок</a>
         </div>

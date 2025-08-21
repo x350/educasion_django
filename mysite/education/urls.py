@@ -19,17 +19,17 @@ urlpatterns = [
     path("students/", StudentsListView.as_view(), name="students_list"),
     path("teachers/", TeachersListView.as_view(), name="teachers_list"),
     path("course/<int:pk>/", CourseDetailView.as_view(), name="course_detail"),
-    path("course/<int:pk>/update/", CourseUpdateView.as_view(), name="course_update"),
-    path("course/<int:pk>/delete/", CourseDeleteView.as_view(), name="course_delete"),
+    path("course/update/<int:pk>/", CourseUpdateView.as_view(), name="course_update"),
+    path("course/delete/<int:pk>/", CourseDeleteView.as_view(), name="course_delete"),
 
     path("teacher/<int:pk>/", TeacherDetailView.as_view(), name='teacher_detail'),
     path("student/<int:pk>/", StudentDetailView.as_view(), name='student_detail'),
 
     path("lessons/", LessonListView.as_view(), name="lessons_list"),
     path("lesson/<int:pk>/", LessonDetailView.as_view(), name="lesson_detail"),
-    path("lesson/create/", LessonCreateView.as_view(), name="lesson_create"),
-    path("lesson/<int:pk>/update/", LessonUpdateView.as_view(), name="lesson_update"),
-    path("lesson/<int:pk>/delete/", LessonDeleteView.as_view(), name="lesson_delete"),
+    path("lesson/create/<int:pk>/", LessonCreateView.as_view(), name="lesson_create"),
+    path("lesson/update/<int:pk>/", LessonUpdateView.as_view(), name="lesson_update"),
+    path("lesson/delete/<int:pk>/", LessonDeleteView.as_view(), name="lesson_delete"),
 
     re_path(r'^_nested_admin/', include('nested_admin.urls')),
 

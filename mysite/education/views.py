@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.views import redirect_to_login
 from django.http import HttpResponseForbidden, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic.base import TemplateResponseMixin, View
 from django.views.generic.detail import SingleObjectMixin
@@ -70,19 +70,11 @@ class CourseCreateView(CreateWithInlinesView):
     model = Course
     form_class = CourseForm
     inlines = [LessonItemInline]
-    # fields = '__all__'
     template_name = 'education/course_create.html'
-    # success_url = reverse_lazy('education:courses_list')
 
     def get_success_url(self):
         return self.object.get_absolute_url()
 
-
-    # def forms_valid(self, form, inlines):
-    #     response = self.form_valid(form)
-    #     for formset in inlines:
-    #         formset.save()
-    #     return response
 
 
 class CourseUpdateView(UpdateWithInlinesView):
@@ -91,8 +83,10 @@ class CourseUpdateView(UpdateWithInlinesView):
     inlines = [LessonItemInline]
     # fields = '__all__'
     template_name = 'education/course_update.html'
-    success_url = reverse_lazy('education:courses_list')
     context_object_name = 'course'
+
+    def get_success_url(self):
+        return reverse_lazy('education:course_detail', kwargs={'pk': self.object.pk})
 
 
 class CourseDeleteView(DeleteView):
@@ -119,11 +113,7 @@ class StudentsListView(ListView):
     model = Student
     context_object_name = 'students'
     template_name = "education/student_list.html"
-    paginate_by = 2
-    # queryset = (
-    #     Student.objects
-    #     .select_related("user")
-    # )
+    paginate_by = 5
 
 
 class StudentDetailView(DetailView):
@@ -180,9 +170,45 @@ class LessonCreateView(CreateWithInlinesView):
     template_name = 'education/lesson_create.html'
     context_object_name = 'lesson'
 
+    def get_initial(self):
+        initial = super().get_initial()
+        course_pk = self.kwargs.get('pk')
+        initial['course'] = Course.objects.get(pk=course_pk)
+        # print('pk - ', initial['course'].pk, course_pk)
+        return initial
+
     def get_success_url(self):
-        return reverse_lazy('education:lesson_detail', kwargs={'pk': self.object.course.pk})
+        # print('pk - ', self.initial['course'] )
+        return reverse_lazy('education:course_detail', kwargs={'pk': self.object.course.pk})
         # return reverse_lazy('education:lessons_list')
+
+# class LessonCreateView(TemplateResponseMixin, View):
+#     template_name = 'education/lesson_create.html'
+    # course = None
+
+    # def get_formset(self, data=None):
+    #     return LessonFilesFormSet(data=data)
+
+    # def dispatch(self, request, *args, **kwargs):
+    #     self.course = get_object_or_404(Course, id=self.kwargs['pk'])
+    #     return super().dispatch(request, request.pk)
+
+    # def get(self, request, *args, **kwargs):
+    #     formset = self.get_formset()
+    #     return self.render_to_response({
+    #         # 'course': self.course,
+    #         'formset': formset,
+    #     })
+
+    # def post(self, request, *args, **kwargs):
+    #     formset = self.get_formset(data=request.POST)
+    #     if formset.is_valid():
+    #         formset.save()
+    #         return redirect('courses_list')
+    #     return self.render_to_response({
+    #         # 'course': self.course,
+    #         'formset': formset,
+    #     })
 
 
 class LessonUpdateView(UpdateWithInlinesView):

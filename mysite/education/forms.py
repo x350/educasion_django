@@ -104,10 +104,10 @@ LessonFormSet = inlineformset_factory(
 LessonFilesFormSet = inlineformset_factory(
     Lesson,
     LessonFiles,
-    # fields=('lesson', 'file', 'description'),
-    form=LessonFilesForm,
+    fields=('lesson', 'file', 'description'),
+    # form=LessonFilesForm,
     extra=1,
-    formset=BaseChildrenFormset,
-    can_delete=False,
+    # formset=BaseChildrenFormset,
+    can_delete=True,
     fk_name='lesson'
 )

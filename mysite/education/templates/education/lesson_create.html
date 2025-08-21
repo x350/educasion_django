@@ -9,15 +9,21 @@
 
     <h1>Создание урока!</h1>
 <div>
-  <form method="post">
+  <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.management_form }}
     {{ form.as_p }}
 
         <h3>Добавление файлов.</h3>
+
     {% for formset in inlines %}
         {{ formset }}
+      {( formset.management_form }}
     {% endfor %}
+
+      <br>
+
+      {{ lesson }}
 
 
     <button type="submit">Создание урока</button>
