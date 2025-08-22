@@ -305,3 +305,23 @@ def user_logout(request):
 
 def index(request):
     return render(request, 'education/index.html')
+
+class IndexListView(ListView):
+    model = Course
+    template_name = "education/course_list.html"
+    context_object_name = 'courses'
+    # extra_context = {'title': 'Наши курсы'}
+    paginate_by = 3
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Наши курсы'
+        return context
+
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            print('111111 -', self.request.user.pk)
+            return Course.objects.all() # реализовать выбор курсов конкретного пользователя
+        else:
+            print('2222 -')
+            return Course.objects.all().filter(students=self.request.user.pk)

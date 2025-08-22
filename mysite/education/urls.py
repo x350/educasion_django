@@ -3,13 +3,13 @@ from django.urls import path, include, re_path
 from django.views.generic import TemplateView
 from .views import register, user_login, user_logout, index, CoursesListView, CourseDetailView, LessonDetailView, \
     StudentsListView, StudentDetailView, TeachersListView, TeacherDetailView, CourseCreateView, CourseUpdateView, \
-    CourseDeleteView, LessonListView, LessonUpdateView, LessonDeleteView, LessonCreateView
+    CourseDeleteView, LessonListView, LessonUpdateView, LessonDeleteView, LessonCreateView, IndexListView
 
 app_name = 'education'
 
 urlpatterns = [
 
-    path("", index, name='index'),
+    path("", IndexListView.as_view(), name='index'),
     path("register/", register, name="register"),
     path("login/", user_login, name="login"),
     path("logout/", user_logout, name="logout"),

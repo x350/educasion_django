@@ -77,10 +77,11 @@ class CourseAdmin(NestedModelAdmin):
         mark_deactivate,
         mark_activate
     ]
-    list_display = "pk", "title", "description", "category",  "created", "update", "is_active"
+    list_display = "pk", "title", "short_description", "category",  "created", "update", "is_active"
     list_display_links = "pk", "title", "category", "is_active"
     ordering = "pk", "-title"
-    search_fields = "title", "description",
+    search_fields = "title", "short_description",
+
 
     inlines = [
         StudentInline,
@@ -88,9 +89,10 @@ class CourseAdmin(NestedModelAdmin):
     ]
 @admin.register(Lesson)
 class LessonAdmin(NestedModelAdmin):
-    list_display =  "pk", "title", "description", "teacher", "photo", "course"
+    list_display =  "pk", "title", "short_description", "teacher", "photo", "course"
     list_display_links = "title",
     inlines = [
         LessonFilesInline,
     ]
+
 

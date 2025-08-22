@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
+
 {% load static %}
+{% load filters %}
 
 {% block title %}{{ title }}{% endblock %}
 
@@ -21,13 +23,16 @@
             <ul class="list-group list-group-flush">
 
               {% for item in lesson.files.all %}
+                <div class="card m-3">
+                        <li class="list-group-item card-header">{{ item.file|split:"/"|last }}</li>
+                        <li class="list-group-item">{{ item.description }}</li>
                         <li class="list-group-item"><a href="{{ item.file.url }}">{{ item.file }}</a></li>
+                </div>
                 {% endfor %}
             </ul>
         </div>
 
         <div class="card mt-3">
-          <div class="card-header">Кнопки:</div>
              <a href="{% url 'education:course_detail' pk=lesson.course.pk %}" class="btn btn-secondary mt-2">Перейти на страницу курса</a>
              <a href="{% url 'education:lesson_update' pk=lesson.pk %}" class="btn btn-secondary mt-2">Редактировать урок</a>
              <a href="{% url 'education:lesson_delete' pk=lesson.pk %}" class="btn btn-secondary mt-2">Удалить урок</a>

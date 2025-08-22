@@ -63,12 +63,15 @@ class Course(models.Model):
 
     title = models.CharField(max_length=200, unique=True, verbose_name='Название курса')
     description = models.TextField(null=False, blank=True, verbose_name='Описание курса')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='courses')
-    created = models.DateTimeField(auto_now_add=True)
-    update = models.DateTimeField(auto_now=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='courses', verbose_name='Категория')
+    created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    update = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
     students = models.ManyToManyField(Student, related_name='courses', blank=True, null=True)
 
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True, verbose_name='Активный курс')
+
+    def short_description(self):
+        return self.description[:50] + ' ... .'
 
     def get_absolute_url(self):
         return reverse_lazy('education:course_detail', kwargs={'pk': self.pk})
@@ -80,8 +83,8 @@ class Course(models.Model):
 class Lesson(models.Model):
     title = models.CharField(max_length=200, unique=True, verbose_name='Название урока')
     description = models.TextField(null=False, blank=True, verbose_name='Описание урока')
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='lessons')
-    photo = models.ImageField(null=True, upload_to='photos/%Y/%m/%d/', blank=True)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='lessons', verbose_name='Преподаватель')
+    photo = models.ImageField(null=True, upload_to='photos/%Y/%m/%d/', blank=True, verbose_name='Фотография')
     course = models.ForeignKey(Course,
                                on_delete=models.CASCADE,
                                related_name='lessons',
@@ -90,6 +93,8 @@ class Lesson(models.Model):
                                verbose_name='Курс',
                                )
 
+    def short_description(self):
+        return self.description[:50] + ' ... .'
 
     def get_absolute_url(self):
         return reverse_lazy('education:lesson_detail', kwargs={'pk': self.pk})

@@ -12,7 +12,7 @@
   <div class="card-body">
   <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
-  {{ form }}
+  {{ form}}
   <h2 class="card-header">Добавление урока</h2>
   {% for formset in inlines %}
     {{ formset }}
