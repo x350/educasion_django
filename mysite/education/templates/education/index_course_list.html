@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Наши курсы.{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}
+
+{% block body %}
+<div class="mx-3">
+    <h1>Наши курсы</h1>
+
+
+<div>
+{% for item in courses %}
+
+   <div class="card m-3">
+      <h5 class="card-header">Название курса: {{ item.title }}</h5>
+      <div class="card-body">
+        <p class="card-title">Категория курса: {{ item.category }}</p>
+        <p class="card-text">Описание курса: {{ item.description }}</p>
+        <div class="mt-2 text-muted">
+        Курс создан {{ item.created  }}.
+        </div>
+
+        <a href="{{ item.get_absolute_url }}" class="btn btn-secondary mt-2">Перейти на страницу курса</a>
+
+      </div>
+   </div>
+
+
+{% empty %}
+<div class="card m-3">
+    <p> Курсов нет</p>
+</div>
+{% endfor %}
+</div>
+
+<nav class="ms-3 mt-3" aria-label="Навигация по страницам">
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link text-dark" href="?page=1">&laquo; первая</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link text-dark"" href="?page={{ page_obj.previous_page_number }}">предыдущая</a>
+        </li>
+        {% endif %}
+
+        <li class="page-item text-dark">
+            <a class="page-link text-dark bg-light" href="#">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.</a>
+        </li>
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link text-dark" href="?page={{ page_obj.next_page_number }}">следующая</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link text-dark" href="?page={{ page_obj.paginator.num_pages }}">последняя &raquo</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+
+
+{% endblock %}

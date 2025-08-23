@@ -48,16 +48,13 @@ class CoursesListView(ListView):
         context['title'] = 'Наши курсы'
         return context
 
-    def get_queryset(self):
-        if self.request.user.is_authenticated:
-            return Course.objects.all() # реализовать выбор курсов конкретного пользователя
-        else:
-            return Course.objects.filter(is_active=True)
 
-    # def dispatch(self, request, *args, **kwargs):
-    #     if not request.user.is_authenticated:
-    #         return HttpResponseForbidden()
-    #     return super(CoursesView, self).dispatch(request, *args, **kwargs)
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return Course.objects.all()
+        else:
+            return Course.objects.all().filter(students=self.request.user.pk)
+
 
 
 class CourseDetailView(DetailView):
@@ -308,7 +305,7 @@ def index(request):
 
 class IndexListView(ListView):
     model = Course
-    template_name = "education/course_list.html"
+    template_name = "education/index_course_list.html"
     context_object_name = 'courses'
     # extra_context = {'title': 'Наши курсы'}
     paginate_by = 3
@@ -318,10 +315,5 @@ class IndexListView(ListView):
         context['title'] = 'Наши курсы'
         return context
 
-    def get_queryset(self):
-        if not self.request.user.is_authenticated:
-            print('111111 -', self.request.user.pk)
-            return Course.objects.all() # реализовать выбор курсов конкретного пользователя
-        else:
-            print('2222 -')
-            return Course.objects.all().filter(students=self.request.user.pk)
+
+
