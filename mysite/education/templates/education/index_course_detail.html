@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %} Страница курса "{{ course.title }}".{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}
+
+{% block body %}
+
+<div class="card m-3">
+      <h2 class="card-header">Курс: {{ course.title }} </h2>
+      <div class="card-body">
+        <p class="card-text">Категория курса: {{ course.category }}</p>
+        <p class="card-text">Описание курса: {{ course.description }}</p>
+        <p class="card-text">Курс создан: {{ course.created }}</p>
+        <p class="card-text">Курс обновлен: {{ course.update  }}</p>
+
+        <div class="card">
+            <div class="card-header">Ученики:</div>
+            <ul class="list-group list-group-flush">
+
+              {% for item in course.students.all %}
+                    {% if item.user.last_name %}
+                        <li class="list-group-item"><a href="{{ item.get_absolute_url }}">{{ item.user.first_name }} {{ item.user.last_name }}</a></li>
+                    {% else %}
+                        <li class="list-group-item"><a href="{{ item.get_absolute_url }}">{{ item.user.username }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header">Уроки курса:</div>
+            <ul class="list-group list-group-flush">
+
+               {% for item in course.lessons.all %}
+                <li class="list-group-item"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a> </li>
+               {% endfor %}
+            </ul>
+        </div>
+
+        <div class="card mt-3">
+          <div class="card-header">Ссылки:</div>
+             <a href="{% url 'education:courses_list' %}" class="btn btn-secondary mt-2">Перейти на страницу списка курсов</a>
+             <a href="{% url 'education:course_update' pk=course.pk %}" class="btn btn-secondary mt-2">Редактировать курс</a>
+             <a href="{% url 'education:lesson_create' pk=course.pk %}" class="btn btn-secondary mt-2">Добавить урок</a>
+             <a href="{% url 'education:course_delete' pk=course.pk %}" class="btn btn-secondary mt-2">Удалить курс</a>
+        </div>
+
+
+      </div>
+</div>
+
+{% endblock %}

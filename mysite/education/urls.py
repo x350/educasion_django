@@ -1,9 +1,10 @@
 from django.contrib import admin
+from django.contrib.auth.views import LoginView
 from django.urls import path, include, re_path
 from django.views.generic import TemplateView
-from .views import register, user_login, user_logout, index, CoursesListView, CourseDetailView, LessonDetailView, \
+from .views import register, CoursesListView, CourseDetailView, LessonDetailView, \
     StudentsListView, StudentDetailView, TeachersListView, TeacherDetailView, CourseCreateView, CourseUpdateView, \
-    CourseDeleteView, LessonListView, LessonUpdateView, LessonDeleteView, LessonCreateView, IndexListView
+    CourseDeleteView, LessonListView, LessonUpdateView, LessonDeleteView, LessonCreateView, IndexListView, UserLogout
 
 app_name = 'education'
 
@@ -11,8 +12,13 @@ urlpatterns = [
 
     path("", IndexListView.as_view(), name='index'),
     path("register/", register, name="register"),
-    path("login/", user_login, name="login"),
-    path("logout/", user_logout, name="logout"),
+    # path("login/", user_login, name="login"),
+    path("login/", LoginView.as_view(
+        template_name='education/register.html'
+    ), name="login"),
+    # path("logout/", user_logout, name="logout"),
+    path("logout/", UserLogout.as_view(), name="logout"),
+
     path("courses/", CoursesListView.as_view(), name="courses_list"),
     path("courses/create/", CourseCreateView.as_view(), name="course_create"),
 

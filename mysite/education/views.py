@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.contrib.auth.views import redirect_to_login
+from django.contrib.auth.views import redirect_to_login, LogoutView, LoginView
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
@@ -281,27 +281,41 @@ def register(request):
     return render(request, 'education/register.html', {'form': form})
 
 
-def user_login(request):
-    if request.method == 'POST':
-        form = UserLoginForm(data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            return redirect('education:index')
-    else:
-        form = UserLoginForm()
-
-    return render(request, 'education/login.html', {'form': form})
-
-def user_logout(request):
-    logout(request)
-    return redirect('education:login')
+# def user_login(request):
+#     if request.method == 'POST':
+#         form = UserLoginForm(data=request.POST)
+#         if form.is_valid():
+#             user = form.get_user()
+#             login(request, user)
+#             return redirect('education:index')
+#     else:
+#         form = UserLoginForm()
+#
+#     return render(request, 'education/login.html', {'form': form})
 
 
 
 
-def index(request):
-    return render(request, 'education/index.html')
+# def user_logout(request):
+#     logout(request)
+#     return redirect('education:login')
+
+
+class UserLogout(View):
+    def get(self, request):
+        logout(request)
+        return redirect('education:login')
+
+    def post(self, request):
+        logout(request)
+        return redirect('education:login')
+
+
+
+
+
+# def index(request):
+#     return render(request, 'education/index.html')
 
 class IndexListView(ListView):
     model = Course
@@ -314,6 +328,9 @@ class IndexListView(ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Наши курсы'
         return context
+
+# class IndexCourseDetailView(CourseDetailView):
+#     template_name = "education/index_course_detail.html"
 
 
 
