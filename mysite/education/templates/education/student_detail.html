@@ -9,10 +9,9 @@
 {% block body %}
 
 <div class="card mx-3">
-      <h2 class="card-header">Курсы студента {{ student.user.username }}: {{ student.user.first_name }} {{ student.user.last_name }}</h2>
+      <h2 class="card-header">Курсы студента "{{ student.user.username }}": {{ student.user.first_name }} {{ student.user.last_name }}</h2>
       <div class="card-body">
         <p class="card-title">Имя и фамилия студента: {{ student.user.first_name }} {{ student.user.last_name }}</p>
-
         <ul class="list-group list-group-flush">
           {% for item in student.courses.all %}
             <li class="list-group-item">

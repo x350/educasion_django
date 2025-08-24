@@ -28,6 +28,18 @@ from extra_views import InlineFormSetFactory, CreateWithInlinesView, UpdateWithI
 #
 #         return super(UserAccessMixin, self).dispatch(request, *args, **kwargs)
 
+# class GetRoleView(View):
+#     def get_context_data(self, *, object_list=None, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         if self.request.user.is_authenticated:
+#             context['is_student'] = Student.objects.filter(pk=self.request.user.pk).exists()
+#             context['is_teacher'] = 'Наши курсы'
+#         else:
+#             context['is_student'] = None
+#             context['is_teacher'] = None
+#
+#         return context
+
 
 class LessonItemInline(InlineFormSetFactory):
     model = Lesson
@@ -43,17 +55,15 @@ class CoursesListView(ListView):
     # extra_context = {'title': 'Наши курсы'}
     paginate_by = 3
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Наши курсы'
-        return context
-
 
     def get_queryset(self):
+
         if not self.request.user.is_authenticated:
             return Course.objects.all()
         else:
             return Course.objects.all().filter(students=self.request.user.pk)
+
+
 
 
 
@@ -96,6 +106,11 @@ class TeachersListView(ListView):
     context_object_name = 'teachers'
     template_name = "education/teachers_list.html"
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Наши преподаватели'
+        return context
+
 
 class TeacherDetailView(DetailView):
     queryset = (
@@ -111,6 +126,11 @@ class StudentsListView(ListView):
     context_object_name = 'students'
     template_name = "education/student_list.html"
     paginate_by = 5
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Наши студенты'
+        return context
 
 
 class StudentDetailView(DetailView):
@@ -311,9 +331,6 @@ class UserLogout(View):
         return redirect('education:login')
 
 
-
-
-
 # def index(request):
 #     return render(request, 'education/index.html')
 
@@ -324,13 +341,8 @@ class IndexListView(ListView):
     # extra_context = {'title': 'Наши курсы'}
     paginate_by = 3
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Наши курсы'
-        return context
 
-# class IndexCourseDetailView(CourseDetailView):
-#     template_name = "education/index_course_detail.html"
+
 
 
 

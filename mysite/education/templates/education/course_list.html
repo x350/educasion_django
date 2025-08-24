@@ -1,21 +1,31 @@
 {% extends 'base.html' %}
+{% load filters %}
 
-{% block title %}Наши курсы.{% endblock %}
+{% block title %}Ваши курсы.{% endblock %}
 
 {% block sidebar %}
 
 {% endblock %}
 
 {% block body %}
+<div class="card m-3">
+    {%if request.user|is_student %}
+    <p> Работает</p>
+    {% endif %}
+    <p>{{ request.user|is_teacher }}</p>
+</div>
+
+
 <div class="mx-3">
     <h1>Ваши курсы</h1>
 </div>
+
 <div class="card mx-3">
 <a href="{% url 'education:course_create' %}" class="btn btn-secondary ">Создать новый курс</a>
 </div>
 
 <div>
-{% for item in courses %}
+{% for item in courses.set  %}
 
    <div class="card m-3">
       <h5 class="card-header">Название курса: {{ item.title }}</h5>
@@ -34,7 +44,7 @@
 
 {% empty %}
 <div class="card m-3">
-    <p> Курсов нет</p>
+    <p class="text-center">У Вас нет курсов</p>
 </div>
 {% endfor %}
 </div>
