@@ -57,11 +57,10 @@ class CoursesListView(ListView):
 
 
     def get_queryset(self):
-
         if not self.request.user.is_authenticated:
             return Course.objects.all()
         else:
-            return Course.objects.all().filter(students=self.request.user.pk)
+            return Course.objects.filter(students=self.request.user.pk)
 
 
 

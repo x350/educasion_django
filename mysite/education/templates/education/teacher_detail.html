@@ -2,24 +2,22 @@
 
 {% block title %}Информация о преподавателе {{ teacher.user.username }}.{% endblock %}
 
-{% block sidebar %}
-
-{% endblock %}
-
 {% block body %}
 
-    <h1>Hello teacher!</h1>
+<div class="card mx-3">
+      <h2 class="card-header">Преподаватель: {{ teacher.user.username }}: {{ teacher.user.first_name }} {{ teacher.user.last_name }}</h2>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          {% for item in teacher.lessons.all %}
+            <li class="list-group-item">
+              <a href="{{ item.get_absolute_url }}">{{ item }}</a>
+            </li>
+          {% endfor %}
+        </ul>
 
-    <h2> Преподаватель: {{ teacher.user.username }}: {{ teacher.user.first_name }} {{ teacher.user.last_name }}</h2>
+          <a href="{% url 'education:teachers_list' %}" class="btn btn-secondary mt-2">Перейти на страницу списка преподавателей</a>
 
-<ul>
-    {% for item in teacher.lessons.all %}
-    <li>
-      <a href="{{ item.get_absolute_url }}">{{ item }}</a>
-    </li>
-    {% endfor %}
-
-
-</ul>
+      </div>
+</div>
 
 {% endblock %}

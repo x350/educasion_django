@@ -5,9 +5,6 @@
 
 {% block title %}{{ title }}{% endblock %}
 
-{% block sidebar %}
-{% endblock %}
-
 {% block body %}
 
 <div class="card m-3">
@@ -33,9 +30,12 @@
         </div>
 
         <div class="card mt-3">
-             <a href="{% url 'education:course_detail' pk=lesson.course.pk %}" class="btn btn-secondary mt-2">Перейти на страницу курса</a>
-             <a href="{% url 'education:lesson_update' pk=lesson.pk %}" class="btn btn-secondary mt-2">Редактировать урок</a>
-             <a href="{% url 'education:lesson_delete' pk=lesson.pk %}" class="btn btn-secondary mt-2">Удалить урок</a>
+                <a href="{% url 'education:course_detail' pk=lesson.course.pk %}" class="btn btn-secondary mt-2">Перейти на страницу курса</a>
+
+            {%if request.user|is_teacher %}
+                <a href="{% url 'education:lesson_update' pk=lesson.pk %}" class="btn btn-secondary mt-2">Редактировать урок</a>
+                <a href="{% url 'education:lesson_delete' pk=lesson.pk %}" class="btn btn-secondary mt-2">Удалить урок</a>
+            {% endif %}
         </div>
 
 

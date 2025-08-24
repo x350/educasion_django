@@ -2,10 +2,6 @@
 
 {% block title %}Наши курсы.{% endblock %}
 
-{% block sidebar %}
-
-{% endblock %}
-
 {% block body %}
 <div class="mx-3">
     <h1>Наши курсы</h1>
@@ -43,7 +39,7 @@
             <a class="page-link text-dark" href="?page=1">&laquo; первая</a>
         </li>
         <li class="page-item">
-            <a class="page-link text-dark"" href="?page={{ page_obj.previous_page_number }}">предыдущая</a>
+            <a class="page-link text-dark" href="?page={{ page_obj.previous_page_number }}">предыдущая</a>
         </li>
         {% endif %}
 
@@ -64,3 +60,4 @@
 
 
 {% endblock %}
+</div>
