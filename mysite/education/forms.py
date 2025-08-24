@@ -2,8 +2,8 @@ from django import forms
 from django.forms.models import BaseInlineFormSet
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from django_select2.forms import Select2MultipleWidget, Select2Widget
-from .models import Course, Lesson, Student, Teacher, LessonFiles
+from django_select2.forms import Select2MultipleWidget
+from .models import Course, Lesson, Student, LessonFiles
 from django.forms import inlineformset_factory
 
 
@@ -27,23 +27,6 @@ class UserRegisterForm(UserCreationForm):
     last_name = forms.CharField(label='Фамилия', widget=forms.TextInput(attrs={'class': 'form-control'}))
 
 
-
-# class StudentWidget(s2forms.ModelSelect2Widget):
-#     search_fields = [
-#         "user__icontains",
-#         # "first_name__icontains",
-#         # "last_name__icontains",
-#         # "email__icontains",
-#     ]
-
-#
-# class LessonWidget(s2forms.ModelSelect2MultipleWidget):
-#     search_fields = [
-#         "title__icontains",
-#         "description__icontains",
-#         "teacher__icontains",
-#     ]
-#
 class CourseForm(forms.ModelForm):
 
     class Meta:
@@ -54,15 +37,7 @@ class CourseForm(forms.ModelForm):
         queryset=Student.objects.all(),
         widget=Select2MultipleWidget,
         label='Студенты',
-        required=False,
-
-    )
-    # lessons = forms.ModelMultipleChoiceField(
-    #     queryset=Lesson.objects.all(),
-    #     widget=Select2MultipleWidget,
-    #     label='Уроки',
-    #     required=False,
-    # )
+        required=False,)
 
 
 class LessonForm(forms.ModelForm):
@@ -78,6 +53,7 @@ class LessonForm(forms.ModelForm):
             ),
         }
 
+
 class LessonFilesForm(forms.ModelForm):
     class Meta:
         model = LessonFiles
@@ -88,8 +64,10 @@ class LessonFilesForm(forms.ModelForm):
             ),
         }
 
+
 class BaseChildrenFormset(BaseInlineFormSet):
     pass
+
 
 LessonFormSet = inlineformset_factory(
     Course,
@@ -105,9 +83,7 @@ LessonFilesFormSet = inlineformset_factory(
     Lesson,
     LessonFiles,
     fields=('lesson', 'file', 'description'),
-    # form=LessonFilesForm,
     extra=1,
-    # formset=BaseChildrenFormset,
     can_delete=True,
     fk_name='lesson'
 )

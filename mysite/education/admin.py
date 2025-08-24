@@ -5,25 +5,19 @@ from nested_admin import NestedModelAdmin, NestedTabularInline, NestedStackedInl
 from .models import Course, Student, Teacher, Lesson, Category, LessonFiles
 
 
-# Register your models here.
-
-
-# class LessonsCourseInline(admin.StackedInline):
-#     model = Lesson
-#     fields = "title", 'description', 'teacher', 'photo',
-#     # inlines = [LessonInline]
-
-
 class StudentInline(NestedStackedInline):
     model = Course.students.through
     extra = 1
+
 
 @admin.action(description='Deactivtion')
 def mark_deactivate(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
     queryset.update(is_active=False)
 
+
 @admin.action(description='Activtion')
 def mark_activate(modeladmin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
+
     queryset.update(is_active=True)
 
 @admin.register(Category)
@@ -47,18 +41,8 @@ class TeacherAdmin(admin.ModelAdmin):
 class LessonFilesInline(NestedStackedInline):
     model = LessonFiles
     extra = 1
-    # model = Lesson.files
     fields = 'file', 'description'
 
-
-# @admin.register(Lesson)
-# class LessonAdmin(admin.ModelAdmin):
-#     model = Lesson
-#     list_display = "pk", "title", "description", "teacher", "photo", 'course'
-#     inlines = [
-#         LessonFilesInline,
-#     ]
-#     list_display_links = "pk", "title",
 
 class LessonInLine(NestedStackedInline):
     model = Lesson
@@ -68,7 +52,6 @@ class LessonInLine(NestedStackedInline):
         LessonFilesInline,
     ]
     list_display_links = "pk", "title",
-
 
 
 @admin.register(Course)
@@ -81,12 +64,12 @@ class CourseAdmin(NestedModelAdmin):
     list_display_links = "pk", "title", "category", "is_active"
     ordering = "pk", "-title"
     search_fields = "title", "short_description",
-
-
     inlines = [
         StudentInline,
         LessonInLine,
     ]
+
+
 @admin.register(Lesson)
 class LessonAdmin(NestedModelAdmin):
     list_display =  "pk", "title", "short_description", "teacher", "photo", "course"
